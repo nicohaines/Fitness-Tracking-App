@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FitTrack – Workouts</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; }
+    nav { background: #222; padding: 1rem; }
+    nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
+    .container { padding: 2rem; }
+    input, select, button {
+      display: block;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">Dashboard</a>
+  <a href="workouts.html">Workouts</a>
+  <a href="progress.html">Progress</a>
+  <a href="nutrition.html">Nutrition</a>
+  <a href="profile.html">Profile</a>
+</nav>
+
+<div class="container">
+  <h1>Log a Workout</h1>
+
+  <form>
+    <label>Workout Type</label>
+    <select>
+      <option>Running</option>
+      <option>Swimming</option>
+      <option>Strength Training</option>
+      <option>Cycling</option>
+    </select>
+
+    <label>Duration (minutes)</label>
+    <input type="number" placeholder="30" />
+
+    <label>Notes</label>
+    <input type="text" placeholder="How did it feel?" />
+
+    <button type="button">Save Workout</button>
+  </form>
+</div>
+
+</body>
+</html>
