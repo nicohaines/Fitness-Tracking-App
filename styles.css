@@ -1,0 +1,32 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+}
+a {
+    text-decoration: none;
+    color: black;
+    padding-right: 50px;
+    font-size: 1.1rem;
+}
+nav {
+    background-color: rgb(1, 162, 1);
+    padding: 6px;
+}
+body {
+    background-color: rgb(225, 247, 234);
+    margin: auto;
+}
+main {
+    margin: 25px;
+}
+.card {
+    background-color: white;
+    padding: 2px 12px;
+    margin: 25px auto;
+    max-width: 1150px;
+}
+#card1 {
+    border-left: 5px solid limegreen;
+}
+#card2 {
+    border-left: 5px solid yellow;
+}
