@@ -1,32 +1,39 @@
-p, h3{
+p, h3, a {
     font-family: Arial, Helvetica, sans-serif;
 }
 a {
     text-decoration: none;
     font-size: 1.1rem;
+    padding-left: 13px;
 }
 .subItems {
-    position:absolute;
+    position: absolute;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+.subItems a{
+    font-size: .9rem;
 }
 nav {
     background-color: rgb(1, 162, 1);
 }
-ul {
-    list-style-type: none; 
-    padding: 0;
-    margin: 0;
-    text-align: left;
+.subNav {
+    display: inline-block;
 }
 .subNav, .subItems {
     border: none;
     line-height: 1.6rem;
-    padding-right: 50px;
     color: black;
     font-size: 1.1rem;
     background-color: transparent;
+    min-width: 100px;
+    max-width: 100px;
 }
-.subItems {
+.subButton{
     display: none;
+    width: 100%;
 }
 body {
     background-color: rgb(225, 247, 234);
@@ -47,10 +54,7 @@ main {
 #card2 {
     border-left: 5px solid yellow;
 }
-.subButton button {
-    display: none;
-}
-.subNav:hover .subItems{
+.subNav:hover .subButton{
     display: block;
 }
 .subNav:hover, .subNav:hover .subItems{
