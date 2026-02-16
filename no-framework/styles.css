@@ -4,16 +4,17 @@ p, h3, a {
 a {
     text-decoration: none;
     font-size: 1.1rem;
-    padding-left: 13px;
+    padding-left: 15px;
 }
 .subItems {
     position: absolute;
     width: 100%;
     overflow: hidden;
+    overflow-wrap: normal;
     padding: 0;
     margin: 0;
 }
-.subItems a{
+.subItems > a{
     font-size: .9rem;
 }
 nav {
@@ -24,7 +25,7 @@ nav {
 }
 .subNav, .subItems {
     border: none;
-    line-height: 1.6rem;
+    line-height: 1.8rem;
     color: black;
     font-size: 1.1rem;
     background-color: transparent;
@@ -57,7 +58,7 @@ main {
 .subNav:hover .subButton{
     display: block;
 }
-.subNav:hover, .subNav:hover .subItems{
+.subNav:hover, .subNav:hover .subItems {
     background-color: rgb(111, 215, 111);
 }
 .subButton:hover{
