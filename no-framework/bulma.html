@@ -6,8 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bulma!</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <style>
+        .white, .navbar-item, .navbar-link {
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
@@ -24,7 +29,7 @@
                     </svg>
 
                 </a>
-                <div class="navbar-burger js-burger" data-target="navbarExampleTransparentExample">
+                <div class="navbar-burger js-burger white" data-target="navbarExampleTransparentExample">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -66,7 +71,7 @@
                                 </a>
                             </p>
                             <p class="control">
-                                <a class="button is-primary"
+                                <a class="button is-primary white"
                                     href="https://github.com/jgthms/bulma/releases/download/1.0.4/bulma-1.0.4.zip">
                                     <span class="icon">
                                         <i class="fas fa-download"></i>
@@ -114,25 +119,25 @@
                     <ul>
                         <li class="is-active">
                             <a>
-                                <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span>
+                                <span class="icon is-small"><i class="fa-solid fa-clipboard"></i></span>
                                 <span>Current</span>
                             </a>
                         </li>
                         <li>
                             <a>
-                                <span class="icon is-small"><i class="fas fa-music" aria-hidden="true"></i></span>
+                                <span class="icon is-small"><i class="fa-regular fa-calendar"></i></span>
                                 <span>Completed</span>
                             </a>
                         </li>
                         <li>
                             <a>
-                                <span class="icon is-small"><i class="fas fa-film" aria-hidden="true"></i></span>
+                                <span class="icon is-small"><i class="fa-solid fa-calendar"></i></span>
                                 <span>Upcoming</span>
                             </a>
                         </li>
                         <li>
                             <a>
-                                <span class="icon is-small"><i class="far fa-file-alt" aria-hidden="true"></i></span>
+                                <span class="icon is-small"><i class="fa-regular fa-clipboard"></i></span>
                                 <span>All</span>
                             </a>
                         </li>
@@ -172,7 +177,7 @@
             </div>
 
             <article class="message is-primary">
-                <div class="message-header">
+                <div class="message-header white">
                     <p>Make a github account</p>
                     <button class="delete" aria-label="delete"></button>
                 </div>
