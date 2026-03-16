@@ -1,8 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '../stores/users'
 
 const isActive = ref(false)
+const userStore = useUserStore()
+const router = useRouter()
+
+function handleLogout() {
+  userStore.logout()
+  router.push({ name: 'login' })
+}
 </script>
 
 <template>
@@ -34,23 +43,31 @@ const isActive = ref(false)
           <RouterLink to="/activity" active-class="is-active" class="navbar-item"> Activity </RouterLink>
           <RouterLink to="/friends" active-class="is-active" class="navbar-item"> Friends </RouterLink>
           
-            <div class="navbar-item has-dropdown is-hoverable">
+            
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item has-dropdown is-hoverable" :class="{ 'is-hidden': !userStore.currentUser }">
                 <RouterLink to="/profile" active-class="is-active" class="navbar-link has-text-primary-100" href="https://bulma.io/documentation/overview/start/"> Account </RouterLink>
                 <div class="navbar-dropdown is-boxed">
                     <RouterLink to="/profile" active-class="is-active" class="navbar-item"> Profile </RouterLink>
                     <RouterLink to="/account-settings" active-class="is-active" class="navbar-item"> Settings </RouterLink>
                     <hr class="navbar-divider">
-                    <RouterLink to="/admin" active-class="is-active" class="navbar-item "> Admin Panel </RouterLink>
+                    <RouterLink v-if="userStore.currentUser?.isAdmin" to="/admin" active-class="is-active" class="navbar-item "> Admin Panel </RouterLink>
                 </div>
             </div>
-        </div>
-
-        <div class="navbar-end">
-          <div class="navbar-item">
+          <div class="navbar-item" v-if="!userStore.currentUser">
             <div class="buttons">
-              <RouterLink to="/login" class="button is-primary">
+              <RouterLink to="/login" class="button is-danger">
                 <strong>Log in</strong>
               </RouterLink>
+            </div>
+          </div>
+          <div class="navbar-item" v-else>
+            <div class="buttons">
+              <button class="button is-danger" @click="handleLogout">
+                <strong>Log out</strong>
+              </button>
             </div>
           </div>
         </div>

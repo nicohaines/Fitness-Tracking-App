@@ -4,6 +4,7 @@ export interface User {
   displayName: string
   isAdmin: boolean
   friends: number[]
+  exerciseStats: number[]
 }
 
 export type ExerciseType =
