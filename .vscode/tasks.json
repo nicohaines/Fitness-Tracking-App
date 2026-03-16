@@ -1,0 +1,68 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Backend: Express Dev Server",
+      "type": "shell",
+      "command": "sh",
+      "args": [
+        "-c",
+        "if [ -f server/package.json ]; then npm run dev --prefix server; else echo '[backend] no server/package.json - skipping'; fi"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": {
+          "regexp": "^(?!x)x$",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "(\\[backend\\] no server/package.json - skipping|listening|ready|started|running|localhost)"
+        }
+      }
+    },
+    {
+      "label": "Frontend: Vite Dev Server",
+      "type": "shell",
+      "command": "npm",
+      "args": [
+        "run",
+        "dev"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/client"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": {
+          "regexp": "^(?!x)x$",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "ready in .*"
+        }
+      }
+    },
+    {
+      "label": "Full Stack: Start Dev Servers",
+      "dependsOn": [
+        "Backend: Express Dev Server",
+        "Frontend: Vite Dev Server"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    }
+  ]
+}

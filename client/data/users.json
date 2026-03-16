@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "username": "admin-alex",
+    "displayName": "Alex Morgan",
+    "isAdmin": true,
+    "friends": [2, 3, 7]
+  },
+  {
+    "id": 2,
+    "username": "jamie-fit",
+    "displayName": "Jamie Lee",
+    "isAdmin": false,
+    "friends": [1, 3, 5]
+  },
+  {
+    "id": 3,
+    "username": "taylor-runner",
+    "displayName": "Taylor Cruz",
+    "isAdmin": false,
+    "friends": [1, 2]
+  },
+  {
+    "id": 4,
+    "username": "sam-lifter",
+    "displayName": "Sam Patel",
+    "isAdmin": false,
+    "friends": [2, 5]
+  },
+  {
+    "id": 5,
+    "username": "river-swim",
+    "displayName": "River Song",
+    "isAdmin": false,
+    "friends": [4, 6]
+  },
+  {
+    "id": 6,
+    "username": "casey-yoga",
+    "displayName": "Casey Kim",
+    "isAdmin": false,
+    "friends": [5, 7]
+  },
+  {
+    "id": 7,
+    "username": "mod-morgan",
+    "displayName": "Morgan Davis",
+    "isAdmin": true,
+    "friends": [1, 6]
+  }
+]

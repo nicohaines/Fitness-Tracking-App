@@ -1,0 +1,37 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend: Express Dev Server",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev --prefix server",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Frontend: Vite Dev Server",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/client"
+    },
+    {
+      "name": "Frontend: Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "Frontend: Vite Dev Server",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/client"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack: Frontend + Backend",
+      "configurations": [
+        "Backend: Express Dev Server",
+        "Frontend: Chrome"
+      ],
+      "stopAll": true
+    }
+  ]
+}

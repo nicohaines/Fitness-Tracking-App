@@ -1,0 +1,146 @@
+[
+  {
+    "id": 1,
+    "userId": 1,
+    "type": "Running",
+    "timeElapsed": 30,
+    "dateRecorded": "2026-03-10",
+    "intensity": "Medium"
+  },
+  {
+    "id": 2,
+    "userId": 1,
+    "type": "Strength",
+    "timeElapsed": 45,
+    "dateRecorded": "2026-03-12",
+    "intensity": "High"
+  },
+  {
+    "id": 3,
+    "userId": 1,
+    "type": "Biking",
+    "timeElapsed": 60,
+    "dateRecorded": "2026-03-15",
+    "intensity": "Medium"
+  },
+  {
+    "id": 4,
+    "userId": 2,
+    "type": "Cardio",
+    "timeElapsed": 20,
+    "dateRecorded": "2026-03-11",
+    "intensity": "Low"
+  },
+  {
+    "id": 5,
+    "userId": 2,
+    "type": "Yoga",
+    "timeElapsed": 60,
+    "dateRecorded": "2026-03-13",
+    "intensity": "Low"
+  },
+  {
+    "id": 6,
+    "userId": 2,
+    "type": "Running",
+    "timeElapsed": 25,
+    "dateRecorded": "2026-03-15",
+    "intensity": "Medium"
+  },
+  {
+    "id": 7,
+    "userId": 3,
+    "type": "Running",
+    "timeElapsed": 45,
+    "dateRecorded": "2026-03-09",
+    "intensity": "High"
+  },
+  {
+    "id": 8,
+    "userId": 3,
+    "type": "Running",
+    "timeElapsed": 50,
+    "dateRecorded": "2026-03-14",
+    "intensity": "High"
+  },
+  {
+    "id": 9,
+    "userId": 3,
+    "type": "Cardio",
+    "timeElapsed": 20,
+    "dateRecorded": "2026-03-16",
+    "intensity": "Low"
+  },
+  {
+    "id": 10,
+    "userId": 4,
+    "type": "Lifting",
+    "timeElapsed": 50,
+    "dateRecorded": "2026-03-10",
+    "intensity": "High"
+  },
+  {
+    "id": 11,
+    "userId": 4,
+    "type": "Strength",
+    "timeElapsed": 40,
+    "dateRecorded": "2026-03-13",
+    "intensity": "High"
+  },
+  {
+    "id": 12,
+    "userId": 4,
+    "type": "Lifting",
+    "timeElapsed": 55,
+    "dateRecorded": "2026-03-16",
+    "intensity": "High"
+  },
+  {
+    "id": 13,
+    "userId": 5,
+    "type": "Swimming",
+    "timeElapsed": 35,
+    "dateRecorded": "2026-03-11",
+    "intensity": "Medium"
+  },
+  {
+    "id": 14,
+    "userId": 5,
+    "type": "Swimming",
+    "timeElapsed": 40,
+    "dateRecorded": "2026-03-14",
+    "intensity": "Medium"
+  },
+  {
+    "id": 15,
+    "userId": 6,
+    "type": "Yoga",
+    "timeElapsed": 75,
+    "dateRecorded": "2026-03-12",
+    "intensity": "Low"
+  },
+  {
+    "id": 16,
+    "userId": 6,
+    "type": "Biking",
+    "timeElapsed": 45,
+    "dateRecorded": "2026-03-15",
+    "intensity": "Medium"
+  },
+  {
+    "id": 17,
+    "userId": 7,
+    "type": "Cardio",
+    "timeElapsed": 30,
+    "dateRecorded": "2026-03-10",
+    "intensity": "Medium"
+  },
+  {
+    "id": 18,
+    "userId": 7,
+    "type": "Strength",
+    "timeElapsed": 55,
+    "dateRecorded": "2026-03-13",
+    "intensity": "High"
+  }
+]
