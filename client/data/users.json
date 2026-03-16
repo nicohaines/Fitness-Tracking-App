@@ -4,7 +4,7 @@
     "username": "admin-alex",
     "displayName": "Alex Morgan",
     "isAdmin": true,
-    "friends": [2, 3, 7],
+    "friends": [1, 2, 3, 4, 5, 6, 7],
     "exerciseStats": [1, 2, 3]
   },
   {
