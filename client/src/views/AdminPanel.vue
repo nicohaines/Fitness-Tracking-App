@@ -3,6 +3,11 @@ import { computed, ref } from 'vue'
 import { useUserStore } from '../stores/users'
 
 const userStore = useUserStore()
+function handleAddUser() {}
+function handleEditUser(user: any) {}
+function handleDeleteUser(user: any) {
+  userStore.deleteUser(user)
+}
 </script>
 
 <template>
@@ -15,34 +20,48 @@ const userStore = useUserStore()
       Access denied. You do not have administrator privileges.
     </p>
     <div v-else>
-      <div class="grid is-col-min-11">
-        <div class="cell box button has-text-center"><i class="fa-solid fa-user-plus"></i></div>
+      <div class="grid">
+        <div class="cell box button">
+          <i class="fa-solid fa-user-plus add-user"></i>
+        </div>
+      </div>
+      <div class="grid">
         <div v-if="userStore.users.length" class="content">
           <template v-for="user in userStore.users" :key="user.id">
             <div v-if="user.id !== userStore.currentUser?.id" class="cell box button">
-              <p class="buttons has-text-right">
-                <button class="button">
-                  <span class="icon is-small">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                  </span>
-                </button>
-                <button class="button">
-                  <span class="icon is-small">
-                    <i class="fa-solid fa-delete-left"></i>
-                  </span>
-                </button>
-              </p>
-              <figure class="image is-128x128 img">
-                <img
-                  class="is-rounded"
-                  :src="
-                    user.profilePicture || 'https://bulma.io/assets/images/placeholders/128x128.png'
-                  "
-                />
-              </figure>
-              <h2 class="title is-4">{{ user.username }} | {{ user.displayName }}</h2>
-              <p v-if="user.administrator" class="has-text-primary-100">Administrator</p>
-              <p v-else class="has-text-primary-100">Standard User</p>
+              <div class="columns">
+                <div class="column">
+                  <figure class="image is-128x128 img">
+                    <img
+                      class="is-rounded"
+                      :src="
+                        user.profilePicture ||
+                        'https://bulma.io/assets/images/placeholders/128x128.png'
+                      "
+                    />
+                  </figure>
+                </div>
+                <div class="column">{{ user.username }}</div>
+                <div class="column">{{ user.displayName }}</div>
+                <div class="column">
+                  <p v-if="user.administrator">Administrator</p>
+                  <p v-else>Standard User</p>
+                </div>
+                <div class="column">
+                  <p class="buttons has-text-right is-right">
+                    <button class="button" @click="handleEditUser(user)">
+                      <span class="icon is-small">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                      </span>
+                    </button>
+                    <button class="button" @click="handleDeleteUser(user)">
+                      <span class="icon is-small">
+                        <i class="fa-solid fa-delete-left"></i>
+                      </span>
+                    </button>
+                  </p>
+                </div>
+              </div>
             </div>
           </template>
         </div>
@@ -53,10 +72,16 @@ const userStore = useUserStore()
 
 <style scoped>
 .box {
-  height: 300px;
+  height: 100px;
 }
-.img {
+img {
+  max-height: 85px;
+  max-width: 85px;
+}
+.add-user {
+  font-size: 4rem;
   margin: auto;
   justify-content: center;
+  padding: 0.8rem;
 }
 </style>

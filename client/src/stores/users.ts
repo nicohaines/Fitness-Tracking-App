@@ -54,7 +54,7 @@ export const useUserStore = defineStore('user', () => {
     function deleteUser(user: any) {//Administrator only
         if (!currentUser.value || !currentUser.value.administrator) return false
         const index = users.value.indexOf(user)
-        if (index !== undefined && index !== -1 && user.value[index].id !== currentUser.value.id) {
+        if (index !== undefined && index !== -1 && user.id !== currentUser.value.id) {
             users.value.splice(index, 1)
         }
     }
