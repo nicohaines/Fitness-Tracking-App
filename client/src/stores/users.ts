@@ -47,12 +47,16 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-    function createUser() {//Administrator only
+    function createUser(username: string, displayName: string, administrator: boolean) {//Administrator only
         if (!currentUser.value || !currentUser.value.administrator) return false
     }
 
-    function deleteUser() {//Administrator only
+    function deleteUser(user: any) {//Administrator only
         if (!currentUser.value || !currentUser.value.administrator) return false
+        const index = users.value.indexOf(user)
+        if (index !== undefined && index !== -1 && user.value[index].id !== currentUser.value.id) {
+            users.value.splice(index, 1)
+        }
     }
 
     function statistics() {

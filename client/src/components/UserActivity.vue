@@ -21,8 +21,8 @@ function handleDeleteActivity(activity: any) {
       <div v-for="activity in userStore.currentUser.activity" :key="activity.date">
         <article class="media">
           <figure class="media-left">
-            <p class="image is-128x128 is-rounded">
-              <img src="https://bulma.io/assets/images/placeholders/128x128.png" />
+            <p class="image is-128x128">
+              <img class ="is-rounded activity-image" src="https://bulma.io/assets/images/placeholders/128x128.png" />
             </p>
           </figure>
           <div class="media-content">
@@ -58,5 +58,8 @@ function handleDeleteActivity(activity: any) {
 .media {
   margin-bottom: 1rem;
   box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
+}
+.activity-image {
+  padding: .7rem;
 }
 </style>
