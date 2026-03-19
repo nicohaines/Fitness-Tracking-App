@@ -6,7 +6,6 @@ import { useUserStore } from '../stores/users'
 
 const userStore = useUserStore()
 const router = useRouter()
-const { loginActive } = storeToRefs(userStore)
 
 const username = ref('')
 const error = ref('')
@@ -28,7 +27,7 @@ function handleLogin() {
 </script>
 
 <template>
-  <main class="section is-center login-screen" v-if="loginActive">
+  <main class="section is-center login-screen" v-if="userStore.loginActive">
     <div class="box">
       <h1 class="title is-2">Login</h1>
       <form @submit.prevent="handleLogin">

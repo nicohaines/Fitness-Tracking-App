@@ -38,7 +38,7 @@ function handleLogout() {
       <div id="navbarBasicExample" class="navbar-menu" :class="{ 'is-active': isActive }">
         <div class="navbar-start">
           <RouterLink to="/" active-class="is-active" class="navbar-item"> Activity </RouterLink>
-          <RouterLink to="/workout" active-class="is-active" class="navbar-item"> +Workout </RouterLink>
+          <a class="navbar-item" @click="userStore.newWorkoutActive = !userStore.newWorkoutActive">+Workout</a>
           <RouterLink to="/friends" active-class="is-active" class="navbar-item"> Friends </RouterLink>
           
             

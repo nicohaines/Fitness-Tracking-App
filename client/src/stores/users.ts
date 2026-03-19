@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', () => {
     const users = ref<User[]>(data as User[])
     const currentUser = ref<User | null>(null)
     const loginActive = ref(false)
+    const newWorkoutActive = ref(false)
 
     function login(username: string): boolean {
         const match = users.value.find((u) => u.username === username)
@@ -24,7 +25,7 @@ export const useUserStore = defineStore('user', () => {
     }
 
     function addActivity() {
-
+        newWorkoutActive.value = false
     }
 
     function deleteActivity() {
@@ -54,5 +55,5 @@ export const useUserStore = defineStore('user', () => {
             return { totalTimeFormatted, totalDistance }
         }
 
-    return { users, currentUser, loginActive,login, logout, addActivity, deleteActivity, createUser, deleteUser, addFriend, removeFriend, statistics }
+    return { users, currentUser, loginActive, newWorkoutActive, login, logout, addActivity, deleteActivity, createUser, deleteUser, addFriend, removeFriend, statistics }
 })
