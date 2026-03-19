@@ -1,30 +1,19 @@
-export interface User {
+export type User = {
   id: number
   username: string
   displayName: string
-  isAdmin: boolean
+  administrator: boolean
   friends: number[]
-  exerciseStats: number[]
-}
-
-export type ExerciseType =
-  | 'Strength'
-  | 'Cardio'
-  | 'Running'
-  | 'Swimming'
-  | 'Yoga'
-  | 'Biking'
-  | 'Lifting'
-
-export type Intensity = 'Low' | 'Medium' | 'High'
-
-export interface ExerciseStat {
-  id: number
-  userId: number
-  type: ExerciseType
-  /** Duration in minutes */
-  timeElapsed: number
-  /** ISO date string (YYYY-MM-DD) */
-  dateRecorded: string
-  intensity: Intensity
+  profilePicture?: string
+  bio?: string
+  reactions: number
+  activity: {
+    timeElapsed: number //seconds
+    type: string
+    date: string
+    intensity: string
+    distance?: number //miles
+    weight?: number //lbs
+    notes?: string
+  }[]
 }

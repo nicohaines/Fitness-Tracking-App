@@ -1,49 +1,58 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useUserStore } from '../stores/users'
-import { useExerciseStatStore } from '../stores/exerciseStats'
 
 const userStore = useUserStore()
-const exerciseStatStore = useExerciseStatStore()
-const currentUser = computed(() => userStore.currentUser)
 
-const userStats = computed(() => {
-  if (!currentUser.value) return []
-  return exerciseStatStore.exerciseStats.filter((s) => s.userId === currentUser.value!.id)
-})
+function formatTime(time: number) {
+    const timeFormatted = computed(() => new Date(time * 1000).toISOString().slice(11, 19))
+    return timeFormatted
+}
+
 </script>
 
 <template>
-    <div v-if="currentUser">
-      <h2 class="title is-4">{{ currentUser.displayName }}</h2>
-      
-      <div v-if="userStats.length" class="table-container">
-        <table class="table is-fullwidth is-striped">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Type</th>
-              <th>Time</th>
-              <th>Date</th>
-              <th>Intensity</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="stat in userStats" :key="stat.id">
-              <td>{{ stat.id }}</td>
-              <td>{{ stat.type }}</td>
-              <td>{{ stat.timeElapsed }} min</td>
-              <td>{{ stat.dateRecorded }}</td>
-              <td>{{ stat.intensity }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p v-else>You haven't recorded any activity yet.</p>
-    </div>
+  <div v-if="userStore.currentUser">
+    <div v-if="userStore.currentUser.activity.length" class="table-container">
+      <div v-for="activity in userStore.currentUser.activity" :key="activity.date">
+        <article class="media">
+          <figure class="media-left">
+            <p class="image is-128x128">
+              <img src="https://bulma.io/assets/images/placeholders/128x128.png" />
+            </p>
+          </figure>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <strong>{{ activity.type }}:</strong> <small>{{ activity.intensity }} Intensity</small> | <small>{{ formatTime(activity.timeElapsed) }}</small> | <small>{{ activity.date }}</small>
+                <div v-if="activity.distance"><strong>Distance:</strong> {{ activity.distance }} miles</div>
+                <div v-if="activity.weight"><strong>Weight:</strong> {{ activity.weight }} lbs</div>
+                <div v-if="activity.notes"> {{ activity.notes}} </div>
 
+              </p>
+            </div>
+            <nav class="level is-mobile">
+              <div class="level-left">
+                <a class="level-item">
+                  <span class="icon is-small"><i class="fas fa-heart"></i></span>
+                </a>
+              </div>
+            </nav>
+          </div>
+          <div class="media-right">
+            <button class="delete"></button>
+          </div>
+        </article>
+      </div>
+
+    </div>
+    <p v-else>You haven't recorded any activity yet.</p>
+  </div>
 </template>
 
 <style scoped>
-
+.media {
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
+}
 </style>

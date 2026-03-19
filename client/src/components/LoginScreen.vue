@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/users'
 
 const userStore = useUserStore()
 const router = useRouter()
+const { loginActive } = storeToRefs(userStore)
 
 const username = ref('')
 const error = ref('')
@@ -26,10 +28,9 @@ function handleLogin() {
 </script>
 
 <template>
-  <main class="section is-center">
-    <h1 class="title is-2">Login</h1>
-
-    <div class="box" style="max-width: 400px">
+  <main class="section is-center login-screen" v-if="loginActive">
+    <div class="box">
+      <h1 class="title is-2">Login</h1>
       <form @submit.prevent="handleLogin">
         <div class="field">
           <label class="label">Username</label>
@@ -56,4 +57,22 @@ function handleLogin() {
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+.login-screen {
+  position: absolute;
+  z-index: 1;
+  margin: auto;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  transition: opacity 1s ease;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.box {
+  padding: 2rem;
+  width: 100%;
+  max-width: 30rem;
+  height: 30rem;
+}
+</style>

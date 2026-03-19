@@ -4,3 +4,5 @@
     <p>Placeholder: user profile information will be displayed here.</p>
   </main>
 </template>
+
+<style scoped></style>

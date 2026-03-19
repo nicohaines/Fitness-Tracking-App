@@ -3,56 +3,292 @@
     "id": 1,
     "username": "admin-alex",
     "displayName": "Alex Morgan",
-    "isAdmin": true,
-    "friends": [1, 2, 3, 4, 5, 6, 7],
-    "exerciseStats": [1, 2, 3]
+    "administrator": true,
+    "friends": [2, 3, 4, 7, 9],
+    "profilePicture": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
+    "bio": "Coach and platform admin. Loves intervals, hill sprints, and helping beginners build consistency.",
+    "reactions": 184,
+    "activity": [
+      {
+        "timeElapsed": 2520,
+        "type": "Run",
+        "date": "2026-03-19",
+        "intensity": "High",
+        "distance": 6.4,
+        "notes": "Tempo run with negative split for the last 2 miles."
+      },
+      {
+        "timeElapsed": 1800,
+        "type": "Cycle",
+        "date": "2026-02-28",
+        "intensity": "Medium",
+        "distance": 11.2,
+        "notes": "Steady cadence ride focused on zone 2 effort."
+      },
+      {
+        "timeElapsed": 2700,
+        "type": "Strength",
+        "date": "2026-01-15",
+        "intensity": "Medium",
+        "weight": 145,
+        "notes": "Upper-body circuit, top bench set at 145 lbs."
+      }
+    ]
   },
   {
     "id": 2,
     "username": "jamie-fit",
     "displayName": "Jamie Lee",
-    "isAdmin": false,
-    "friends": [1, 3, 5],
-    "exerciseStats": [4, 5, 6]
+    "administrator": false,
+    "friends": [1, 3, 5, 8],
+    "profilePicture": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
+    "bio": "Trying to hit 10k steps daily while training for my first 10K.",
+    "reactions": 73,
+    "activity": [
+      {
+        "timeElapsed": 2100,
+        "type": "Run",
+        "date": "2026-03-05",
+        "intensity": "Medium",
+        "distance": 4.1,
+        "notes": "Easy aerobic run with a 10-minute warm-up."
+      },
+      {
+        "timeElapsed": 2700,
+        "type": "Yoga",
+        "date": "2025-12-20",
+        "intensity": "Low",
+        "notes": "Recovery flow emphasizing hips and hamstrings."
+      }
+    ]
   },
   {
     "id": 3,
     "username": "taylor-runner",
     "displayName": "Taylor Cruz",
-    "isAdmin": false,
-    "friends": [1, 2],
-    "exerciseStats": [7, 8, 9]
+    "administrator": false,
+    "friends": [1, 2, 6],
+    "profilePicture": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=400&fit=crop",
+    "reactions": 112,
+    "activity": [
+      {
+        "timeElapsed": 3300,
+        "type": "Run",
+        "date": "2026-02-14",
+        "intensity": "High",
+        "distance": 7.3,
+        "notes": "Long progression run, final mile close to 10K pace."
+      },
+      {
+        "timeElapsed": 900,
+        "type": "Mobility",
+        "date": "2026-01-08",
+        "intensity": "Low",
+        "notes": "Ankle and thoracic mobility routine post-run."
+      },
+      {
+        "timeElapsed": 1200,
+        "type": "Core",
+        "date": "2025-12-08",
+        "intensity": "Medium",
+        "notes": "Core block with planks, dead bugs, and carries."
+      }
+    ]
   },
   {
     "id": 4,
     "username": "sam-lifter",
     "displayName": "Sam Patel",
-    "isAdmin": false,
-    "friends": [2, 5],
-    "exerciseStats": [10, 11, 12]
+    "administrator": false,
+    "friends": [1, 5, 7],
+    "profilePicture": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+    "bio": "Strength-focused lifter working on better sleep and recovery.",
+    "reactions": 96,
+    "activity": [
+      {
+        "timeElapsed": 3600,
+        "type": "Strength",
+        "date": "2026-03-02",
+        "intensity": "High",
+        "weight": 235,
+        "notes": "Lower-body day with squats up to 235 lbs."
+      },
+      {
+        "timeElapsed": 1200,
+        "type": "Walk",
+        "date": "2025-12-01",
+        "intensity": "Low",
+        "distance": 1.2,
+        "notes": "Light recovery walk after leg day."
+      }
+    ]
   },
   {
     "id": 5,
     "username": "river-swim",
     "displayName": "River Song",
-    "isAdmin": false,
-    "friends": [4, 6],
-    "exerciseStats": [13, 14]
+    "administrator": false,
+    "friends": [2, 4, 6, 10],
+    "profilePicture": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop",
+    "reactions": 88,
+    "activity": [
+      {
+        "timeElapsed": 2700,
+        "type": "Swim",
+        "date": "2026-02-22",
+        "intensity": "Medium",
+        "distance": 1.6,
+        "notes": "Mixed freestyle intervals and kickboard drills."
+      },
+      {
+        "timeElapsed": 2400,
+        "type": "Strength",
+        "date": "2026-01-27",
+        "intensity": "Medium",
+        "weight": 95,
+        "notes": "Full-body dumbbell session, top set at 95 lbs."
+      }
+    ]
   },
   {
     "id": 6,
     "username": "casey-yoga",
     "displayName": "Casey Kim",
-    "isAdmin": false,
-    "friends": [5, 7],
-    "exerciseStats": [15, 16]
+    "administrator": false,
+    "friends": [3, 5, 8],
+    "bio": "Yoga instructor who mixes flow days with easy cycling.",
+    "reactions": 67,
+    "activity": [
+      {
+        "timeElapsed": 3000,
+        "type": "Yoga",
+        "date": "2026-03-11",
+        "intensity": "Low",
+        "notes": "Slow vinyasa flow to improve balance and control."
+      },
+      {
+        "timeElapsed": 2100,
+        "type": "Cycle",
+        "date": "2025-12-29",
+        "intensity": "Medium",
+        "distance": 9.8,
+        "notes": "Indoor bike intervals with 2-minute surges."
+      }
+    ]
   },
   {
     "id": 7,
     "username": "mod-morgan",
     "displayName": "Morgan Davis",
-    "isAdmin": true,
-    "friends": [1, 6],
-    "exerciseStats": [17, 18]
+    "administrator": true,
+    "friends": [1, 4, 9],
+    "profilePicture": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
+    "reactions": 141,
+    "activity": [
+      {
+        "timeElapsed": 1800,
+        "type": "HIIT",
+        "date": "2026-02-06",
+        "intensity": "High",
+        "weight": 65,
+        "notes": "HIIT circuit with kettlebell swings at 65 lbs."
+      },
+      {
+        "timeElapsed": 1500,
+        "type": "Walk",
+        "date": "2026-01-02",
+        "intensity": "Low",
+        "distance": 1,
+        "notes": "Short walk to cool down and lower heart rate."
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "username": "nina-trails",
+    "displayName": "Nina Brooks",
+    "administrator": false,
+    "friends": [2, 6, 10],
+    "profilePicture": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop",
+    "bio": "Weekend trail runner. Collecting elevation and coffee shops.",
+    "reactions": 79,
+    "activity": [
+      {
+        "timeElapsed": 4500,
+        "type": "Trail Run",
+        "date": "2026-03-07",
+        "intensity": "High",
+        "distance": 8,
+        "notes": "Hilly trail run with 900 ft total elevation gain."
+      },
+      {
+        "timeElapsed": 900,
+        "type": "Mobility",
+        "date": "2025-12-12",
+        "intensity": "Low",
+        "notes": "Foam rolling and mobility after long trail effort."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "username": "owen-rows",
+    "displayName": "Owen Fisher",
+    "administrator": false,
+    "friends": [1, 7, 10],
+    "reactions": 58,
+    "activity": [
+      {
+        "timeElapsed": 2400,
+        "type": "Row",
+        "date": "2026-02-01",
+        "intensity": "Medium",
+        "distance": 5.5,
+        "notes": "Steady rowing piece with final 5-minute push."
+      },
+      {
+        "timeElapsed": 3000,
+        "type": "Strength",
+        "date": "2026-01-19",
+        "intensity": "High",
+        "weight": 205,
+        "notes": "Deadlift-focused day, top working set at 205 lbs."
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "username": "priya-pace",
+    "displayName": "Priya Raman",
+    "administrator": false,
+    "friends": [5, 8, 9],
+    "profilePicture": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
+    "bio": "Data nerd tracking pace, heart rate, and sleep quality.",
+    "reactions": 104,
+    "activity": [
+      {
+        "timeElapsed": 2280,
+        "type": "Run",
+        "date": "2026-03-19",
+        "intensity": "Medium",
+        "distance": 4.6,
+        "notes": "Pace-focused run keeping each mile under 8:30."
+      },
+      {
+        "timeElapsed": 2700,
+        "type": "Pilates",
+        "date": "2026-02-10",
+        "intensity": "Low",
+        "notes": "Core and glute activation Pilates session."
+      },
+      {
+        "timeElapsed": 3600,
+        "type": "Cycle",
+        "date": "2025-12-31",
+        "intensity": "High",
+        "distance": 16.4,
+        "notes": "End-of-year threshold ride with 3 hard intervals."
+      }
+    ]
   }
 ]

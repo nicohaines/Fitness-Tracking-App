@@ -9,9 +9,7 @@ const userStore = useUserStore()
 const router = useRouter()
 
 function handleLogout() {
-  userStore.logout()
-  router.push({ name: 'login' })
-}
+  userStore.logout()}
 </script>
 
 <template>
@@ -39,8 +37,8 @@ function handleLogout() {
 
       <div id="navbarBasicExample" class="navbar-menu" :class="{ 'is-active': isActive }">
         <div class="navbar-start">
-          <RouterLink to="/" active-class="is-active" class="navbar-item"> Home </RouterLink>
-          <RouterLink to="/activity" active-class="is-active" class="navbar-item"> Activity </RouterLink>
+          <RouterLink to="/" active-class="is-active" class="navbar-item"> Activity </RouterLink>
+          <RouterLink to="/workout" active-class="is-active" class="navbar-item"> +Workout </RouterLink>
           <RouterLink to="/friends" active-class="is-active" class="navbar-item"> Friends </RouterLink>
           
             
@@ -51,23 +49,16 @@ function handleLogout() {
                 <RouterLink to="/profile" active-class="is-active" class="navbar-link has-text-primary-100" href="https://bulma.io/documentation/overview/start/"> Account </RouterLink>
                 <div class="navbar-dropdown is-boxed">
                     <RouterLink to="/profile" active-class="is-active" class="navbar-item"> Profile </RouterLink>
-                    <RouterLink to="/account-settings" active-class="is-active" class="navbar-item"> Settings </RouterLink>
-                    <hr class="navbar-divider">
-                    <RouterLink v-if="userStore.currentUser?.isAdmin" to="/admin" active-class="is-active" class="navbar-item "> Admin Panel </RouterLink>
+                    <a class="navbar-item" @click="handleLogout"> Log out </a>
+                    <hr v-if="userStore.currentUser?.administrator" class="navbar-divider">
+                    <RouterLink v-if="userStore.currentUser?.administrator" to="/admin" active-class="is-active" class="navbar-item "> Admin Panel </RouterLink>
                 </div>
             </div>
           <div class="navbar-item" v-if="!userStore.currentUser">
             <div class="buttons">
-              <RouterLink to="/login" class="button is-danger">
+              <a class="button is-link" @click="userStore.loginActive = !userStore.loginActive">
                 <strong>Log in</strong>
-              </RouterLink>
-            </div>
-          </div>
-          <div class="navbar-item" v-else>
-            <div class="buttons">
-              <button class="button is-danger" @click="handleLogout">
-                <strong>Log out</strong>
-              </button>
+              </a>
             </div>
           </div>
         </div>

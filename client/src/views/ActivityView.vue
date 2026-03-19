@@ -1,35 +1,59 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useUserStore } from '../stores/users'
-import { useExerciseStatStore } from '../stores/exerciseStats'
 import UserActivity from '../components/UserActivity.vue'
 
 const userStore = useUserStore()
-const exerciseStatStore = useExerciseStatStore()
 
-const currentUser = computed(() => userStore.currentUser)
-
-const userStats = computed(() => {
-  if (!currentUser.value) return []
-  return exerciseStatStore.exerciseStats.filter((s) => s.userId === currentUser.value!.id)
-})
 </script>
 
 <template>
   <main class="section">
-    <h1 class="title is-2">Activity</h1>
 
-    <div v-if="currentUser">
-      <h2 class="title is-4">{{ currentUser.displayName }}</h2>
+    <div v-if="userStore.currentUser">
+      <h2 class="title is-2">{{ userStore.currentUser.displayName }}</h2>
 
-      <h2 class="title is-3">Add Exercise</h2>
-      
-
+      <hr>
+      <nav class="level">
+        <!-- <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Favorite Workout</p>
+            <p class="title">{{ userStore.statistics().favoriteWorkout }}</p>
+          </div>
+        </div> -->
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Total Time</p>
+            <p class="title">{{ userStore.statistics().totalTimeFormatted }}</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Number of Workouts</p>
+            <p class="title">{{ userStore.currentUser.activity.length }}</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Total Distance</p>
+            <p class="title">{{ userStore.statistics().totalDistance }} miles</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Reactions</p>
+            <p class="title">{{ userStore.currentUser.reactions || 0 }}</p>
+          </div>
+        </div>
+      </nav>
+      <hr>
+      <h3 class="title is-5 mt-5">Your Activity</h3>
       <UserActivity />
     </div>
 
     <div v-else class="notification is-warning is-light">
-      Please log in to view activity.
+      Please log in to view your activity.
     </div>
   </main>
 </template>
+
+<style scoped></style>
