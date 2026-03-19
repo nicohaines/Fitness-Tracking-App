@@ -24,28 +24,35 @@ export const useUserStore = defineStore('user', () => {
         currentUser.value = null
     }
 
-    function addActivity() {
+    function addActivity(type: string, intensity: string, timeElapsed: number, distance?: number, weight?: number, notes?: string): boolean {
+        if (!currentUser.value) return false
+        if (!type || !intensity || !timeElapsed) return false
         newWorkoutActive.value = false
+        currentUser.value?.activity.push({
+            type,
+            intensity,
+            timeElapsed,
+            distance,
+            weight,
+            notes,
+            date: new Date().toISOString().slice(0, 10)
+        })
+        return true
     }
 
-    function deleteActivity() {
-        
+    function deleteActivity(activity: any) {
+        const index = currentUser.value?.activity.indexOf(activity)
+        if (index !== undefined && index !== -1) {
+            currentUser.value?.activity.splice(index, 1)
+        }
     }
 
     function createUser() {//Administrator only
-
+        if (!currentUser.value || !currentUser.value.administrator) return false
     }
 
     function deleteUser() {//Administrator only
-
-    }
-
-    function addFriend() {
-
-    }
-
-    function removeFriend(){
-
+        if (!currentUser.value || !currentUser.value.administrator) return false
     }
 
     function statistics() {
@@ -55,5 +62,5 @@ export const useUserStore = defineStore('user', () => {
             return { totalTimeFormatted, totalDistance }
         }
 
-    return { users, currentUser, loginActive, newWorkoutActive, login, logout, addActivity, deleteActivity, createUser, deleteUser, addFriend, removeFriend, statistics }
+    return { users, currentUser, loginActive, newWorkoutActive, login, logout, addActivity, deleteActivity, createUser, deleteUser, statistics }
 })

@@ -38,8 +38,15 @@ function handleLogout() {
       <div id="navbarBasicExample" class="navbar-menu" :class="{ 'is-active': isActive }">
         <div class="navbar-start">
           <RouterLink to="/" active-class="is-active" class="navbar-item"> Activity </RouterLink>
-          <a class="navbar-item" @click="userStore.newWorkoutActive = !userStore.newWorkoutActive">+Workout</a>
+          <!-- <a class="navbar-item" @click="userStore.newWorkoutActive = !userStore.newWorkoutActive">+Workout</a> -->
           <RouterLink to="/friends" active-class="is-active" class="navbar-item"> Friends </RouterLink>
+          <div class="navbar-item" v-if="userStore.currentUser">
+            <div class="buttons">
+              <a class="button is-link" @click="userStore.newWorkoutActive = !userStore.newWorkoutActive">
+                <i class="fa-solid fa-circle-plus"></i><strong>New Workout</strong>
+              </a>
+            </div>
+          </div>
           
             
         </div>

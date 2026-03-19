@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import ActivityView from '../views/ActivityView.vue'
 import LoginView from '../views/LoginView.vue'
 import AdminPanel from '../views/AdminPanel.vue'
-import WorkoutView from '../views/WorkoutView.vue'
 import FriendsView from '../views/FriendsView.vue'
 import ProfileView from '../views/ProfileView.vue'
 
@@ -23,11 +22,6 @@ const router = createRouter({
       path: '/admin',
       name: 'admin',
       component: AdminPanel,
-    },
-    {
-      path: '/workout',
-      name: 'workout',
-      component: WorkoutView,
     },
     {
       path: '/friends',

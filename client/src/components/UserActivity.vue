@@ -9,6 +9,10 @@ function formatTime(time: number) {
     return timeFormatted
 }
 
+function handleDeleteActivity(activity: any) {
+    userStore.deleteActivity(activity)
+}
+
 </script>
 
 <template>
@@ -17,7 +21,7 @@ function formatTime(time: number) {
       <div v-for="activity in userStore.currentUser.activity" :key="activity.date">
         <article class="media">
           <figure class="media-left">
-            <p class="image is-128x128">
+            <p class="image is-128x128 is-rounded">
               <img src="https://bulma.io/assets/images/placeholders/128x128.png" />
             </p>
           </figure>
@@ -40,7 +44,7 @@ function formatTime(time: number) {
             </nav>
           </div>
           <div class="media-right">
-            <button class="delete"></button>
+            <button class="delete" @click="handleDeleteActivity(activity)"></button>
           </div>
         </article>
       </div>

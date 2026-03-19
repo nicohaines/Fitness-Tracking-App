@@ -7,80 +7,112 @@ import { useUserStore } from '../stores/users'
 const userStore = useUserStore()
 const router = useRouter()
 
-const username = ref('')
+// Form fields with defaults
+const workoutType = ref('Strength')
+const intensity = ref('Medium')
+const hours = ref(0)
+const minutes = ref(0)
+const seconds = ref(30)
+const distance = ref<number | null>(null)
+const weight = ref<number | null>(null)
+const comments = ref('')
 const error = ref('')
 
-function handleLogin() {
-  if (!username.value) {
-    error.value = 'Please select a username.'
+function handleAddWorkout() {
+  // Validate required fields
+  if (!workoutType.value) {
+    error.value = 'Please select a workout type.'
     return
   }
 
+  if (!intensity.value) {
+    error.value = 'Please select an intensity level.'
+    return
+  }
+
+  // Calculate total time elapsed in seconds
+  const totalSeconds = (hours.value || 0) * 3600 + (minutes.value || 0) * 60 + (seconds.value || 30)
+
   error.value = ''
-  const success = userStore.login(username.value.trim())
+
+  const success = userStore.addActivity(
+    workoutType.value,
+    intensity.value,
+    totalSeconds,
+    distance.value ?? undefined,
+    weight.value ?? undefined,
+    comments.value.trim() || undefined
+  )
   if (success) {
+    // Reset form
+    workoutType.value = 'Strength'
+    intensity.value = 'Medium'
+    hours.value = 0
+    minutes.value = 0
+    seconds.value = 30
+    distance.value = null
+    weight.value = null
+    comments.value = ''
     router.push({ name: 'home' })
   } else {
-    error.value = 'Username not found. Please try again.'
+    error.value = 'Failed to add workout. Please try again.'
   }
 }
 </script>
 
 <template>
-  <main class="section is-center login-screen" v-if="userStore.newWorkoutActive">
+  <main class="section is-center workout-screen" v-if="userStore.newWorkoutActive">
     <div class="box">
         <div class="has-text-right">
             <button class="delete" @click="userStore.newWorkoutActive = !userStore.newWorkoutActive"></button>
           </div>
       <h1 class="title is-2">Add Workout</h1>
       
-      <form @submit.prevent="handleLogin">
+      <form @submit.prevent="handleAddWorkout">
         <div class="field">
           <label class="label">Workout Type</label>
           <div class="control">
             <div class="select">
-              <select>
-                <option value="strength">Strength</option>
-                <option value="walking">Walk</option>
-                <option value="running">Run</option>
-                <option value="cycling">Cycle</option>
-                <option value="swimming">Swim</option>
-                <option value="yoga">Yoga</option>
+              <select v-model="workoutType">
+                <option value="Strength">Strength</option>
+                <option value="Walking">Walk</option>
+                <option value="Running">Run</option>
+                <option value="Cycling">Cycle</option>
+                <option value="Swimming">Swim</option>
+                <option value="Yoga">Yoga</option>
               </select>
             </div>
           </div>
-          <p v-if="error" class="help is-danger">{{ error }}</p>
         </div>
 
         <div class="field">
           <label class="label">Intensity</label>
           <div class="control">
             <div class="select">
-              <select>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
+              <select v-model="intensity">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
               </select>
             </div>
           </div>
-          <p v-if="error" class="help is-danger">{{ error }}</p>
         </div>
         <label class="label block-label">Total Time Elapsed</label>
         <div class="field has-addons time-input">
           <div class="control">
-            <input class="input" type="number" placeholder="Hours" min="0" max="23" />
+            <input v-model.number="hours" class="input" type="number" placeholder="Hours" min="0" max="23" />
           </div>
           <div class="control">
             <a class="button is-static">h</a>
           </div>
           <div class="control">
-            <input class="input" type="number" placeholder="Minutes" min="0" max="59" />
+            <input v-model.number="minutes" class="input" type="number" placeholder="Minutes" min="0" max="59" />
           </div>
           <div class="control">
             <a class="button is-static">m</a>
           </div>
           <div class="control">
-            <input class="input" type="number" placeholder="Seconds" min="0" max="59" />
+            <input v-model.number="seconds" class="input" type="number" placeholder="Seconds" min="0" max="59" />
           </div>
           <div class="control">
             <a class="button is-static">s</a>
@@ -90,21 +122,21 @@ function handleLogin() {
         <div class="field">
           <label class="label">Distance</label>
           <div class="control">
-            <input class="input" type="number" placeholder="Total Distance (Miles)" min="0" />
+            <input v-model.number="distance" class="input" type="number" placeholder="Total Distance (Miles)" min="0" />
           </div>
         </div>
 
         <div class="field">
           <label class="label">Weight</label>
           <div class="control">
-            <input class="input" type="number" placeholder="Maximum Weight Lifted (lbs)" min="0" />
+            <input v-model.number="weight" class="input" type="number" placeholder="Maximum Weight Lifted (lbs)" min="0" />
           </div>
         </div>
 
         <div class="field">
           <label class="label">Comments</label>
           <div class="control">
-            <textarea class="textarea" placeholder="Enter notes about your workout..."></textarea>
+            <textarea v-model="comments" class="textarea" placeholder="Enter notes about your workout..."></textarea>
           </div>
         </div>
 
@@ -113,13 +145,15 @@ function handleLogin() {
             <button class="button is-link is-fullwidth" type="submit">Add Workout</button>
           </div>
         </div>
+
+        <p v-if="error" class="help is-danger">{{ error }}</p>
       </form>
     </div>
   </main>
 </template>
 
 <style scoped>
-.login-screen {
+.workout-screen {
   position: absolute;
   z-index: 1;
   margin: auto;
