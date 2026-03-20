@@ -29,12 +29,12 @@ function handleLogin() {
 <template>
   <main class="section is-center login-screen" v-if="userStore.loginActive">
     <div class="box">
-      <h1 class="title is-2">Login</h1>
+      <h1 class="title is-2"><i class="fa-solid fa-user"></i> Login</h1>
       <form @submit.prevent="handleLogin">
         <div class="field">
           <label class="label">Username</label>
-          <div class="control">
-            <div class="select">
+          <div class="control is-expanded">
+            <div class="select is-fullwidth">
               <select v-model="username">
                 <option disabled value="">Select a user</option>
                 <option v-for="user in userStore.users" :key="user.id" :value="user.username">
@@ -44,6 +44,12 @@ function handleLogin() {
             </div>
           </div>
           <p v-if="error" class="help is-danger">{{ error }}</p>
+        </div>
+        <div class="field">
+          <label class="label">Password</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Password" disabled />
+          </div>
         </div>
 
         <div class="field">

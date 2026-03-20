@@ -128,7 +128,7 @@ function handleClose() {
         <div class="field">
           <label class="checkbox">
             <input v-model="administrator" type="checkbox" />
-            <strong> Administrator Permissions</strong>
+            <strong> Administrator Privileges</strong>
           </label>
         </div>
 

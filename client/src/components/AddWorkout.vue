@@ -8,7 +8,7 @@ const userStore = useUserStore()
 const router = useRouter()
 
 // Form fields with defaults
-const defaultSeconds = 30
+const defaultSeconds = 0
 const defaultWorkoutType = 'Strength'
 const defaultIntensity = 'Medium'
 
@@ -78,8 +78,8 @@ function handleAddWorkout() {
       <form @submit.prevent="handleAddWorkout">
         <div class="field">
           <label class="label">Workout Type</label>
-          <div class="control">
-            <div class="select">
+          <div class="control is-expanded">
+            <div class="select is-fullwidth">
               <select v-model="workoutType">
                 <option value="Strength">Strength</option>
                 <option value="Walking">Walk</option>
@@ -94,8 +94,8 @@ function handleAddWorkout() {
 
         <div class="field">
           <label class="label">Intensity</label>
-          <div class="control">
-            <div class="select">
+          <div class="control is-expanded">
+            <div class="select is-fullwidth">
               <select v-model="intensity">
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
@@ -106,7 +106,7 @@ function handleAddWorkout() {
         </div>
         <label class="label block-label">Total Time Elapsed</label>
         <div class="field has-addons time-input">
-          <div class="control">
+          <div class="control is-expanded">
             <input
               v-model.number="hours"
               class="input"
@@ -117,9 +117,9 @@ function handleAddWorkout() {
             />
           </div>
           <div class="control">
-            <a class="button is-static">h</a>
+            <a class="button is-static">hours</a>
           </div>
-          <div class="control">
+          <div class="control is-expanded">
             <input
               v-model.number="minutes"
               class="input"
@@ -130,9 +130,9 @@ function handleAddWorkout() {
             />
           </div>
           <div class="control">
-            <a class="button is-static">m</a>
+            <a class="button is-static">minutes</a>
           </div>
-          <div class="control">
+          <div class="control is-expanded">
             <input
               v-model.number="seconds"
               class="input"
@@ -143,12 +143,12 @@ function handleAddWorkout() {
             />
           </div>
           <div class="control">
-            <a class="button is-static">s</a>
+            <a class="button is-static">seconds</a>
           </div>
         </div>
 
         <div class="field">
-          <label class="label">Distance</label>
+          <label class="label">Total Distance</label>
           <div class="control">
             <input
               v-model.number="distance"
@@ -162,7 +162,7 @@ function handleAddWorkout() {
         </div>
 
         <div class="field">
-          <label class="label">Weight</label>
+          <label class="label">Maximum Weight</label>
           <div class="control">
             <input
               v-model.number="weight"
