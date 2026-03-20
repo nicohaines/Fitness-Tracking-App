@@ -1,194 +1,142 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, ref, watch } from 'vue'
 import { useUserStore } from '../stores/users'
 
 const userStore = useUserStore()
-const router = useRouter()
 
-// Form fields with defaults
-const defaultSeconds = 30
-const defaultWorkoutType = 'Strength'
-const defaultIntensity = 'Medium'
-
-const workoutType = ref(defaultWorkoutType)
-const intensity = ref(defaultIntensity)
-const hours = ref(0)
-const minutes = ref(0)
-const seconds = ref(defaultSeconds)
-const distance = ref<number | null>(null)
-const weight = ref<number | null>(null)
-const comments = ref('')
+const username = ref('')
+const displayName = ref('')
+const bio = ref('')
+const administrator = ref(false)
 const error = ref('')
 
-function handleAddWorkout() {
-  // Validate required fields
-  if (!workoutType.value) {
-    error.value = 'Please select a workout type.'
+const isEditMode = computed(
+  () => userStore.modifyUserMode === 'edit' && userStore.modifyUserTargetId !== null,
+)
+
+const selectedUser = computed(() => {
+  if (!isEditMode.value) return null
+  return userStore.users.find((u) => u.id === userStore.modifyUserTargetId) ?? null
+})
+
+function resetToCreateDefaults() {
+  username.value = ''
+  displayName.value = ''
+  bio.value = ''
+  administrator.value = false
+}
+
+function populateFromSelectedUser() {
+  if (!selectedUser.value) {
+    resetToCreateDefaults()
     return
   }
 
-  if (!intensity.value) {
-    error.value = 'Please select an intensity level.'
+  username.value = selectedUser.value.username
+  displayName.value = selectedUser.value.displayName
+  bio.value = selectedUser.value.bio ?? ''
+  administrator.value = selectedUser.value.administrator
+}
+
+watch(
+  [
+    () => userStore.modifyUserActive,
+    () => userStore.modifyUserMode,
+    () => userStore.modifyUserTargetId,
+    () => userStore.users.length,
+  ],
+  () => {
+    if (!userStore.modifyUserActive) return
+
+    if (isEditMode.value) {
+      populateFromSelectedUser()
+      return
+    }
+
+    resetToCreateDefaults()
+  },
+  { immediate: true },
+)
+
+function handleSaveUser() {
+  if (!username.value.trim() || !displayName.value.trim()) {
+    error.value = 'Username and display name are required.'
     return
   }
-
-  // Calculate total time elapsed in seconds
-  const totalSeconds = (hours.value || 0) * 3600 + (minutes.value || 0) * 60 + (seconds.value || defaultSeconds)
 
   error.value = ''
 
-  const success = userStore.addActivity(
-    workoutType.value,
-    intensity.value,
-    totalSeconds,
-    distance.value ?? undefined,
-    weight.value ?? undefined,
-    comments.value.trim() || undefined,
-  )
+  const success = isEditMode.value
+    ? userStore.updateUser(
+        userStore.modifyUserTargetId as number,
+        username.value,
+        displayName.value,
+        administrator.value,
+        bio.value,
+      )
+    : userStore.createUser(username.value, displayName.value, administrator.value, bio.value)
+
   if (success) {
-    // Reset form
-    workoutType.value = defaultWorkoutType
-    intensity.value = defaultIntensity
-    hours.value = 0
-    minutes.value = 0
-    seconds.value = defaultSeconds
-    distance.value = null
-    weight.value = null
-    comments.value = ''
-    router.push({ name: 'home' })
+    resetToCreateDefaults()
   } else {
-    error.value = 'Failed to add workout. Please try again.'
+    error.value = 'Unable to save user. Ensure username is unique and values are valid.'
   }
+}
+
+function handleClose() {
+  error.value = ''
+  userStore.closeModifyUserForm()
 }
 </script>
 
 <template>
-  <main class="section is-center workout-screen" v-if="userStore.modifyUserActive && userStore.currentUser?.administrator">
+  <main
+    class="section is-center workout-screen"
+    v-if="userStore.modifyUserActive && userStore.currentUser?.administrator"
+  >
     <div class="box">
       <div class="has-text-right">
-        <button
-          class="delete"
-          @click="userStore.modifyUserActive = !userStore.modifyUserActive"
-        ></button>
+        <button class="delete" @click="handleClose"></button>
       </div>
-      <h1 class="title is-2"><i class="fa-solid fa-circle-plus"></i> New Workout</h1>
+      <h1 class="title is-2">
+        <i class="fa-solid" :class="isEditMode ? 'fa-pen-to-square' : 'fa-user-plus'"></i>
+        {{ isEditMode ? 'Update User' : 'Add User' }}
+      </h1>
 
-      <form @submit.prevent="handleAddWorkout">
+      <form @submit.prevent="handleSaveUser">
         <div class="field">
-          <label class="label">Workout Type</label>
+          <label class="label">Username (Required)</label>
           <div class="control">
-            <div class="select">
-              <select v-model="workoutType">
-                <option value="Strength">Strength</option>
-                <option value="Walking">Walk</option>
-                <option value="Running">Run</option>
-                <option value="Cycling">Cycle</option>
-                <option value="Swimming">Swim</option>
-                <option value="Yoga">Yoga</option>
-              </select>
-            </div>
+            <input v-model="username" class="input" type="text" placeholder="Username" />
           </div>
         </div>
 
         <div class="field">
-          <label class="label">Intensity</label>
+          <label class="label">Display Name (Required)</label>
           <div class="control">
-            <div class="select">
-              <select v-model="intensity">
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <label class="label block-label">Total Time Elapsed</label>
-        <div class="field has-addons time-input">
-          <div class="control">
-            <input
-              v-model.number="hours"
-              class="input"
-              type="number"
-              placeholder="Hours"
-              min="0"
-              max="23"
-            />
-          </div>
-          <div class="control">
-            <a class="button is-static">h</a>
-          </div>
-          <div class="control">
-            <input
-              v-model.number="minutes"
-              class="input"
-              type="number"
-              placeholder="Minutes"
-              min="0"
-              max="59"
-            />
-          </div>
-          <div class="control">
-            <a class="button is-static">m</a>
-          </div>
-          <div class="control">
-            <input
-              v-model.number="seconds"
-              class="input"
-              type="number"
-              placeholder="Seconds"
-              min="0"
-              max="59"
-            />
-          </div>
-          <div class="control">
-            <a class="button is-static">s</a>
+            <input v-model="displayName" class="input" type="text" placeholder="Display Name" />
           </div>
         </div>
 
         <div class="field">
-          <label class="label">Distance</label>
+          <label class="label">Bio</label>
           <div class="control">
-            <input
-              v-model.number="distance"
-              class="input"
-              type="number"
-              step=".01"
-              placeholder="Total Distance (Miles)"
-              min="0"
-            />
+            <textarea v-model="bio" class="textarea" placeholder="User Bio..."></textarea>
           </div>
         </div>
 
         <div class="field">
-          <label class="label">Weight</label>
-          <div class="control">
-            <input
-              v-model.number="weight"
-              class="input"
-              type="number"
-              step=".01"
-              placeholder="Maximum Weight Lifted (lbs)"
-              min="0"
-            />
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label">Comments</label>
-          <div class="control">
-            <textarea
-              v-model="comments"
-              class="textarea"
-              placeholder="Enter notes about your workout..."
-            ></textarea>
-          </div>
+          <label class="checkbox">
+            <input v-model="administrator" type="checkbox" />
+            <strong> Administrator Permissions</strong>
+          </label>
         </div>
 
         <div class="field">
           <div class="control">
-            <button class="button is-link is-fullwidth" type="submit">Add Workout</button>
+            <button class="button is-link is-fullwidth" type="submit">
+              {{ isEditMode ? 'Update User' : 'Create User' }}
+            </button>
           </div>
         </div>
 

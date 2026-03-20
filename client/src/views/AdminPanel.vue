@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
 import { useUserStore } from '../stores/users'
+import type { User } from '../../types'
 
 const userStore = useUserStore()
-function handleAddUser() {}
-function handleEditUser(user: any) {}
-function handleDeleteUser(user: any) {
+
+function handleAddUser() {
+  userStore.openCreateUserForm()
+}
+
+function handleEditUser(user: User) {
+  userStore.openEditUserForm(user)
+}
+
+function handleDeleteUser(user: User) {
   userStore.deleteUser(user)
 }
 </script>
@@ -21,7 +28,7 @@ function handleDeleteUser(user: any) {
     </p>
     <div v-else>
       <div class="grid">
-        <div class="cell box button" @click="userStore.modifyUserActive = !userStore.modifyUserActive">
+        <div class="cell box button" @click="handleAddUser">
           <i class="fa-solid fa-user-plus add-user"></i>
         </div>
       </div>
@@ -49,7 +56,7 @@ function handleDeleteUser(user: any) {
                 </div>
                 <div class="column">
                   <p class="buttons has-text-right is-right">
-                    <button class="button" @click="userStore.modifyUserActive = !userStore.modifyUserActive">
+                    <button class="button" @click="handleEditUser(user)">
                       <span class="icon is-small">
                         <i class="fa-solid fa-pen-to-square"></i>
                       </span>
