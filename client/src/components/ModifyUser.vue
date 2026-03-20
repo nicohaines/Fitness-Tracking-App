@@ -65,12 +65,12 @@ function handleAddWorkout() {
 </script>
 
 <template>
-  <main class="section is-center workout-screen" v-if="userStore.newWorkoutActive">
+  <main class="section is-center workout-screen" v-if="userStore.modifyUserActive && userStore.currentUser?.administrator">
     <div class="box">
       <div class="has-text-right">
         <button
           class="delete"
-          @click="userStore.newWorkoutActive = !userStore.newWorkoutActive"
+          @click="userStore.modifyUserActive = !userStore.modifyUserActive"
         ></button>
       </div>
       <h1 class="title is-2"><i class="fa-solid fa-circle-plus"></i> New Workout</h1>

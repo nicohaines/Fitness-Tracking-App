@@ -7,13 +7,16 @@ export type User = {
   profilePicture?: string
   bio?: string
   reactions: number
-  activity: {
-    timeElapsed: number //seconds
-    type: string
-    date: string
-    intensity: string
-    distance?: number //miles
-    weight?: number //lbs
-    notes?: string
-  }[]
+  activity: Activity[]
+}
+
+export type Activity = {
+  id: number
+  timeElapsed: number //seconds
+  type: string
+  date: string
+  intensity: string
+  distance?: number //miles
+  weight?: number //lbs
+  notes?: string
 }

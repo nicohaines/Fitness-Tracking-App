@@ -21,14 +21,14 @@ function handleDeleteUser(user: any) {
     </p>
     <div v-else>
       <div class="grid">
-        <div class="cell box button">
+        <div class="cell box button" @click="userStore.modifyUserActive = !userStore.modifyUserActive">
           <i class="fa-solid fa-user-plus add-user"></i>
         </div>
       </div>
       <div class="grid">
         <div v-if="userStore.users.length" class="content">
           <template v-for="user in userStore.users" :key="user.id">
-            <div v-if="user.id !== userStore.currentUser?.id" class="cell box button">
+            <div v-if="user.id !== userStore.currentUser?.id" class="cell box button ">
               <div class="columns">
                 <div class="column">
                   <figure class="image is-128x128 img">
@@ -49,7 +49,7 @@ function handleDeleteUser(user: any) {
                 </div>
                 <div class="column">
                   <p class="buttons has-text-right is-right">
-                    <button class="button" @click="handleEditUser(user)">
+                    <button class="button" @click="userStore.modifyUserActive = !userStore.modifyUserActive">
                       <span class="icon is-small">
                         <i class="fa-solid fa-pen-to-square"></i>
                       </span>

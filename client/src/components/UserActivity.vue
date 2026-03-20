@@ -1,15 +1,22 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useUserStore } from '../stores/users'
+import type { Activity } from '../../types'
 
 const userStore = useUserStore()
+
+const sortedActivities = computed(() => {
+  return userStore.currentUser?.activity
+    ? [...userStore.currentUser.activity].sort((a, b) => b.id - a.id)
+    : []
+})
 
 function formatTime(time: number) {
     const timeFormatted = computed(() => new Date(time * 1000).toISOString().slice(11, 19))
     return timeFormatted
 }
 
-function handleDeleteActivity(activity: any) {
+function handleDeleteActivity(activity: Activity) {
     userStore.deleteActivity(activity)
 }
 
@@ -17,8 +24,8 @@ function handleDeleteActivity(activity: any) {
 
 <template>
   <div v-if="userStore.currentUser">
-    <div v-if="userStore.currentUser.activity.length" class="table-container">
-      <div v-for="activity in userStore.currentUser.activity" :key="activity.date">
+    <div v-if="sortedActivities.length" class="table-container">
+      <div v-for="activity in sortedActivities" :key="activity.id">
         <article class="media">
           <figure class="media-left">
             <p class="image is-128x128">

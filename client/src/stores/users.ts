@@ -1,6 +1,6 @@
 import data from '../../data/users.json';
 import { defineStore } from 'pinia';
-import type { User } from '../../types';
+import type { Activity, User } from '../../types';
 import { ref } from 'vue';
 import { computed } from 'vue';
 
@@ -9,6 +9,7 @@ export const useUserStore = defineStore('user', () => {
     const currentUser = ref<User | null>(null)
     const loginActive = ref(false)
     const newWorkoutActive = ref(false)
+    const modifyUserActive = ref(false)
 
     function login(username: string): boolean {
         const match = users.value.find((u) => u.username === username)
@@ -28,7 +29,11 @@ export const useUserStore = defineStore('user', () => {
         if (!currentUser.value) return false
         if (!type || !intensity || !timeElapsed) return false
         newWorkoutActive.value = false
-        currentUser.value?.activity.push({
+        const id = currentUser.value.activity.length
+            ? Math.max(...currentUser.value.activity.map((a) => a.id)) + 1
+            : 1
+        currentUser.value?.activity.unshift({
+            id,
             type,
             intensity,
             timeElapsed,
@@ -40,8 +45,8 @@ export const useUserStore = defineStore('user', () => {
         return true
     }
 
-    function deleteActivity(activity: any) {
-        const index = currentUser.value?.activity.indexOf(activity)
+    function deleteActivity(activity: Activity) {
+        const index = currentUser.value?.activity.findIndex((a) => a.id === activity.id)
         if (index !== undefined && index !== -1) {
             currentUser.value?.activity.splice(index, 1)
         }
@@ -51,9 +56,9 @@ export const useUserStore = defineStore('user', () => {
         if (!currentUser.value || !currentUser.value.administrator) return false
     }
 
-    function deleteUser(user: any) {//Administrator only
+    function deleteUser(user: User) {//Administrator only
         if (!currentUser.value || !currentUser.value.administrator) return false
-        const index = users.value.indexOf(user)
+        const index = users.value.findIndex((u) => u.id === user.id)
         if (index !== undefined && index !== -1 && user.id !== currentUser.value.id) {
             users.value.splice(index, 1)
         }
@@ -66,5 +71,5 @@ export const useUserStore = defineStore('user', () => {
             return { totalTimeFormatted, totalDistance }
         }
 
-    return { users, currentUser, loginActive, newWorkoutActive, login, logout, addActivity, deleteActivity, createUser, deleteUser, statistics }
+    return { users, currentUser, loginActive, newWorkoutActive, modifyUserActive, login, logout, addActivity, deleteActivity, createUser, deleteUser, statistics }
 })
