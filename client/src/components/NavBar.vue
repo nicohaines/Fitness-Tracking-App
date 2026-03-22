@@ -55,7 +55,7 @@ function handleLogout() {
           <div class="navbar-item has-dropdown is-hoverable" :class="{ 'is-hidden': !userStore.currentUser }">
                 <RouterLink to="/profile" active-class="is-active" class="navbar-link has-text-primary-100" href="https://bulma.io/documentation/overview/start/"> Account </RouterLink>
                 <div class="navbar-dropdown is-boxed">
-                    <RouterLink to="/profile" active-class="is-active" class="navbar-item"> Profile </RouterLink>
+                    <RouterLink to="/profile" active-class="is-active" class="navbar-item" @click="userStore.currentUser && userStore.updateProfile(userStore.currentUser.id)"> Profile </RouterLink>
                     <a class="navbar-item" @click="handleLogout"> Log out </a>
                     <hr v-if="userStore.currentUser?.administrator" class="navbar-divider">
                     <RouterLink v-if="userStore.currentUser?.administrator" to="/admin" active-class="is-active" class="navbar-item "> Admin Panel </RouterLink>

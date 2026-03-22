@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useUserStore } from '../stores/users'
+import { RouterLink } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const userStore = useUserStore()
+const router = useRouter()
 
 const friendUsers = computed(() => {
   if (!userStore.currentUser) return []
@@ -17,7 +20,7 @@ const friendUsers = computed(() => {
     <div v-if="userStore.currentUser">
       <div v-if="friendUsers.length" class="content">
         <div class="grid is-col-min-11">
-          <div v-for="friend in friendUsers" :key="friend.id" class="cell box button">
+          <RouterLink to="/profile" v-for="friend in friendUsers" :key="friend.id" class="cell box button" @click="userStore.updateProfile(friend.id)">
             <figure class="image is-128x128 img">
               <img
                 class="is-rounded"
@@ -28,7 +31,7 @@ const friendUsers = computed(() => {
             </figure>
             <h3 class="title is-5">{{ friend.displayName }}</h3>
             <p>{{ friend.friends.length }} Friends | {{ friend.activity.length }} Workouts</p>
-          </div>
+          </RouterLink>
         </div>
       </div>
       <p v-else>No friends listed for this user.</p>

@@ -6,8 +6,8 @@ import type { Activity } from '../../types'
 const userStore = useUserStore()
 
 const sortedActivities = computed(() => {
-  return userStore.currentUser?.activity
-    ? [...userStore.currentUser.activity].sort((a, b) => b.id - a.id)
+  return userStore.displayProfileUser?.activity
+    ? [...userStore.displayProfileUser.activity].sort((a, b) => b.id - a.id)
     : []
 })
 
@@ -23,7 +23,7 @@ function handleDeleteActivity(activity: Activity) {
 </script>
 
 <template>
-  <div v-if="userStore.currentUser">
+  <div v-if="userStore.currentUser && userStore.displayProfileUser">
     <div v-if="sortedActivities.length" class="table-container">
       <div v-for="activity in sortedActivities" :key="activity.id">
         <article class="media">
@@ -42,7 +42,8 @@ function handleDeleteActivity(activity: Activity) {
 
               </p>
             </div>
-            <nav class="level is-mobile">
+            
+            <nav v-if="userStore.currentUser === userStore.displayProfileUser" class="level is-mobile">
               <div class="level-left">
                 <a class="level-item">
                   <span class="icon is-small"><i class="fas fa-heart"></i></span>
@@ -50,7 +51,7 @@ function handleDeleteActivity(activity: Activity) {
               </div>
             </nav>
           </div>
-          <div class="media-right">
+          <div v-if="userStore.currentUser === userStore.displayProfileUser" class="media-right">
             <button class="delete" @click="handleDeleteActivity(activity)"></button>
           </div>
         </article>

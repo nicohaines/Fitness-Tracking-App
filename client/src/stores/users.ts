@@ -12,12 +12,14 @@ export const useUserStore = defineStore('user', () => {
   const modifyUserActive = ref(false)
   const modifyUserMode = ref<'create' | 'edit'>('create')
   const modifyUserTargetId = ref<number | null>(null)
+  const displayProfileUser = ref<User | null>(null)
 
   function login(username: string): boolean {
     const match = users.value.find((u) => u.username === username)
     if (match) {
       currentUser.value = match
       loginActive.value = false
+      displayProfileUser.value = match
       return true
     }
     return false
@@ -25,6 +27,7 @@ export const useUserStore = defineStore('user', () => {
 
   function logout() {
     currentUser.value = null
+    displayProfileUser.value = null
   }
 
   function addActivity(
@@ -150,17 +153,28 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  function statistics() {
+  function statistics(userID: number) {
+    const user = users.value.find((u) => u.id === userID)
+    if (!user) return { totalTimeFormatted: '00:00:00', totalDistance: 0 }
+
     const totalTime = computed(() =>
-      currentUser.value?.activity.reduce((total, activity) => total + activity.timeElapsed, 0),
+      user.activity.reduce((total, activity) => total + activity.timeElapsed, 0),
     )
     const totalDistance = computed(() =>
-      currentUser.value?.activity.reduce((total, activity) => total + (activity.distance || 0), 0),
+      user.activity.reduce((total, activity) => total + (activity.distance || 0), 0),
     )
     const totalTimeFormatted = computed(() =>
       new Date((totalTime.value ?? 0) * 1000).toISOString().slice(11, 19),
     )
     return { totalTimeFormatted, totalDistance }
+  }
+
+  function updateProfile(userId: number | null) {
+    if (userId === null) {
+      displayProfileUser.value = null
+      return
+    }
+    displayProfileUser.value = users.value.find((u) => u.id === userId) || null
   }
 
   return {
@@ -182,5 +196,7 @@ export const useUserStore = defineStore('user', () => {
     updateUser,
     deleteUser,
     statistics,
+    updateProfile,
+    displayProfileUser,
   }
 })

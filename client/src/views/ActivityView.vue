@@ -23,7 +23,7 @@ const userStore = useUserStore()
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">Total Time</p>
-            <p class="title">{{ userStore.statistics().totalTimeFormatted }}</p>
+            <p class="title">{{ userStore.statistics(userStore.currentUser.id).totalTimeFormatted }}</p>
           </div>
         </div>
         <div class="level-item has-text-centered">
@@ -35,7 +35,7 @@ const userStore = useUserStore()
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">Total Distance</p>
-            <p class="title">{{ userStore.statistics().totalDistance }} miles</p>
+            <p class="title">{{ userStore.statistics(userStore.currentUser.id).totalDistance }} miles</p>
           </div>
         </div>
         <div class="level-item has-text-centered">
