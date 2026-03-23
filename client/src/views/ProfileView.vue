@@ -24,7 +24,7 @@ const userStore = useUserStore()
           <div class="content">
             <h1 class="title is-2">{{ userStore.displayProfileUser.displayName }}</h1>
 
-            <p><strong>{{ userStore.displayProfileUser.activity.length }} Workouts | {{ userStore.displayProfileUser.friends.length }} Friends</strong></p>
+            <p><strong>{{ userStore.displayProfileUser.activity.length }} Workouts | {{ userStore.displayProfileUser.friends.length }} Friends | Top Workout:</strong> {{ userStore.statistics(userStore.displayProfileUser.id).favoriteWorkout }}</p>
             <p><strong>Bio: </strong>
               {{ userStore.displayProfileUser.bio || '' }}
             </p>
