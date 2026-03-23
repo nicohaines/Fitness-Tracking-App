@@ -19,4 +19,10 @@ export type Activity = {
   distance?: number //miles
   weight?: number //lbs
   notes?: string
+  reactions: Reaction[]
+}
+
+export type Reaction = {
+  userId: number;
+  id: number;
 }

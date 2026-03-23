@@ -14,33 +14,39 @@ const userStore = useUserStore()
 
       <hr>
       <nav class="level">
-        <!-- <div class="level-item has-text-centered">
+        <div v-if="userStore.statistics(userStore.currentUser.id).favoriteWorkout" class="level-item has-text-centered">
           <div>
             <p class="heading">Favorite Workout</p>
-            <p class="title">{{ userStore.statistics().favoriteWorkout }}</p>
+            <p class="title">{{ userStore.statistics(userStore.currentUser.id).favoriteWorkout }}</p>
           </div>
-        </div> -->
+        </div>
         <div class="level-item has-text-centered">
           <div>
-            <p class="heading">Total Time</p>
+            <p class="heading">Total Workout Time</p>
             <p class="title">{{ userStore.statistics(userStore.currentUser.id).totalTimeFormatted }}</p>
           </div>
         </div>
         <div class="level-item has-text-centered">
           <div>
-            <p class="heading">Number of Workouts</p>
+            <p class="heading">Total Number of Workouts</p>
             <p class="title">{{ userStore.currentUser.activity.length }}</p>
           </div>
         </div>
-        <div class="level-item has-text-centered">
+        <div v-if="userStore.statistics(userStore.currentUser.id).totalDistance !== 0" class="level-item has-text-centered">
           <div>
             <p class="heading">Total Distance</p>
             <p class="title">{{ userStore.statistics(userStore.currentUser.id).totalDistance }} miles</p>
           </div>
         </div>
+        <div v-if="userStore.statistics(userStore.currentUser.id).maxWeight !== 0" class="level-item has-text-centered">
+          <div>
+            <p class="heading">Maximum Weight</p>
+            <p class="title">{{ userStore.statistics(userStore.currentUser.id).maxWeight }} lbs</p>
+          </div>
+        </div>
         <div class="level-item has-text-centered">
           <div>
-            <p class="heading">Reactions</p>
+            <p class="heading">Total Reactions</p>
             <p class="title">{{ userStore.currentUser.reactions || 0 }}</p>
           </div>
         </div>

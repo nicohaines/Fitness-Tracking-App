@@ -82,10 +82,10 @@ function handleAddWorkout() {
             <div class="select is-fullwidth">
               <select v-model="workoutType">
                 <option value="Strength">Strength</option>
-                <option value="Walking">Walk</option>
-                <option value="Running">Run</option>
-                <option value="Cycling">Cycle</option>
-                <option value="Swimming">Swim</option>
+                <option value="Walking">Walking</option>
+                <option value="Running">Running</option>
+                <option value="Cycling">Cycling</option>
+                <option value="Swimming">Swimming</option>
                 <option value="Yoga">Yoga</option>
               </select>
             </div>
@@ -117,7 +117,7 @@ function handleAddWorkout() {
             />
           </div>
           <div class="control">
-            <a class="button is-static">hours</a>
+            <a class="button is-static">h</a>
           </div>
           <div class="control is-expanded">
             <input
@@ -130,7 +130,7 @@ function handleAddWorkout() {
             />
           </div>
           <div class="control">
-            <a class="button is-static">minutes</a>
+            <a class="button is-static">m</a>
           </div>
           <div class="control is-expanded">
             <input
@@ -143,7 +143,7 @@ function handleAddWorkout() {
             />
           </div>
           <div class="control">
-            <a class="button is-static">seconds</a>
+            <a class="button is-static">s</a>
           </div>
         </div>
 

@@ -2,10 +2,18 @@ import data from '../../data/users.json'
 import { defineStore } from 'pinia'
 import type { Activity, User } from '../../types'
 import { ref } from 'vue'
-import { computed } from 'vue'
 
 export const useUserStore = defineStore('user', () => {
-  const users = ref<User[]>(data as User[])
+  const users = ref<User[]>(
+    (data as User[]).map((user) => ({
+      ...user,
+      activity: user.activity.map((activity, index) => ({
+        ...activity,
+        id: activity.id ?? index + 1,
+        reactions: activity.reactions ?? [],
+      })),
+    })),
+  )
   const currentUser = ref<User | null>(null)
   const loginActive = ref(false)
   const newWorkoutActive = ref(false)
@@ -53,12 +61,13 @@ export const useUserStore = defineStore('user', () => {
       weight,
       notes,
       date: new Date().toISOString().slice(0, 10),
+      reactions: [],
     })
     return true
   }
 
-  function deleteActivity(activity: Activity) {
-    const index = currentUser.value?.activity.findIndex((a) => a.id === activity.id)
+  function deleteActivity(activityid: number) {
+    const index = currentUser.value?.activity.findIndex((a) => a.id === activityid)
     if (index !== undefined && index !== -1) {
       currentUser.value?.activity.splice(index, 1)
     }
@@ -155,18 +164,28 @@ export const useUserStore = defineStore('user', () => {
 
   function statistics(userID: number) {
     const user = users.value.find((u) => u.id === userID)
-    if (!user) return { totalTimeFormatted: '00:00:00', totalDistance: 0 }
+    if (!user || user.activity.length === 0) return { totalTimeFormatted: '00:00:00', totalDistance: 0, maxWeight: 0, favoriteWorkout: null }
 
-    const totalTime = computed(() =>
-      user.activity.reduce((total, activity) => total + activity.timeElapsed, 0),
-    )
-    const totalDistance = computed(() =>
-      user.activity.reduce((total, activity) => total + (activity.distance || 0), 0),
-    )
-    const totalTimeFormatted = computed(() =>
-      new Date((totalTime.value ?? 0) * 1000).toISOString().slice(11, 19),
-    )
-    return { totalTimeFormatted, totalDistance }
+    const totalTime = user.activity.reduce((total, activity) => total + activity.timeElapsed, 0)
+    const totalDistance = user.activity.reduce((total, activity) => total + (activity.distance || 0), 0)
+    const totalTimeFormatted = new Date(totalTime * 1000).toISOString().slice(11, 19)
+    const maxWeight = Math.max(...user.activity.map((a) => a.weight || 0))
+
+    const typeCounts = user.activity.reduce<Record<string, number>>((counts, activity) => {
+      counts[activity.type] = (counts[activity.type] || 0) + 1
+      return counts
+    }, {})
+
+    let favoriteWorkout = ''
+    let maxCount = 0
+    for (const [type, count] of Object.entries(typeCounts)) {
+      if (count > maxCount) {
+        maxCount = count
+        favoriteWorkout = type
+      }
+    }
+
+    return { favoriteWorkout, totalTimeFormatted, totalDistance, maxWeight }
   }
 
   function updateProfile(userId: number | null) {

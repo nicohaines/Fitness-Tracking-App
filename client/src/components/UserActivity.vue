@@ -16,16 +16,12 @@ function formatTime(time: number) {
     return timeFormatted
 }
 
-function handleDeleteActivity(activity: Activity) {
-    userStore.deleteActivity(activity)
-}
-
 </script>
 
 <template>
   <div v-if="userStore.currentUser && userStore.displayProfileUser">
     <div v-if="sortedActivities.length" class="table-container">
-      <div v-for="activity in sortedActivities" :key="activity.id">
+      <div v-for="sortedActivity in sortedActivities" :key="sortedActivity.id">
         <article class="media">
           <figure class="media-left">
             <p class="image is-128x128">
@@ -35,24 +31,24 @@ function handleDeleteActivity(activity: Activity) {
           <div class="media-content">
             <div class="content">
               <p>
-                <strong>{{ activity.type }}:</strong> <small>{{ activity.intensity }} Intensity</small> | <small>{{ formatTime(activity.timeElapsed) }}</small> | <small>{{ activity.date }}</small>
-                <div v-if="activity.distance"><strong>Distance:</strong> {{ activity.distance }} miles</div>
-                <div v-if="activity.weight"><strong>Weight:</strong> {{ activity.weight }} lbs</div>
-                <div v-if="activity.notes"> {{ activity.notes}} </div>
+                <strong>{{ sortedActivity.type }}:</strong> <small>{{ sortedActivity.intensity }} Intensity</small> | <small>{{ formatTime(sortedActivity.timeElapsed) }}</small> | <small>{{ sortedActivity.date }}</small>
+                <div v-if="sortedActivity.distance"><strong>Distance:</strong> {{ sortedActivity.distance }} miles</div>
+                <div v-if="sortedActivity.weight"><strong>Weight:</strong> {{ sortedActivity.weight }} lbs</div>
+                <div v-if="sortedActivity.notes"> {{ sortedActivity.notes}} </div>
 
               </p>
             </div>
             
-            <nav v-if="userStore.currentUser === userStore.displayProfileUser" class="level is-mobile">
+            <nav class="level is-mobile">
               <div class="level-left">
                 <a class="level-item">
-                  <span class="icon is-small"><i class="fas fa-heart"></i></span>
+                  <span class="icon is-small heart"><i class="fas fa-heart" :class="{'red-heart': sortedActivity.reactions?.some((r) => r.userId === userStore.currentUser?.id)}"></i></span><span v-if="sortedActivity.reactions && sortedActivity.reactions.length > 0">&nbsp;{{ sortedActivity.reactions.length }}</span>
                 </a>
               </div>
             </nav>
           </div>
           <div v-if="userStore.currentUser === userStore.displayProfileUser" class="media-right">
-            <button class="delete" @click="handleDeleteActivity(activity)"></button>
+            <button class="delete" @click="userStore.deleteActivity(sortedActivity.id)"></button>
           </div>
         </article>
       </div>
@@ -69,5 +65,11 @@ function handleDeleteActivity(activity: Activity) {
 }
 .activity-image {
   padding: .7rem;
+}
+.heart{
+  color: #4a4a4a;
+}
+.red-heart {
+  color: #ff3860;
 }
 </style>
