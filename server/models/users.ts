@@ -13,7 +13,7 @@ type CreateUserInput = {
 type UpdateUserInput = Partial<CreateUserInput>
 
 function loadSeedUsers(): User[] {
-	const filePath = path.resolve(__dirname, '../data/users.json')
+	const filePath = path.join(process.cwd(), 'server/data/users.json')
 	const json = readFileSync(filePath, 'utf8')
 	const parsed = JSON.parse(json) as User[]
 
