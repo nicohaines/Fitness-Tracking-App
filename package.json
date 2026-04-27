@@ -17,7 +17,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc && npm run build:client",
-    "build:client": "cd Client && npm install && npm run build",
+    "build:client": "cd client && npm install && npm run build",
     "start": "node dist/index.js",
     "dev": "tsx watch server/index.ts"
   },
