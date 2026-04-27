@@ -12,8 +12,8 @@ function handleEditUser(user: User) {
   userStore.openEditUserForm(user)
 }
 
-function handleDeleteUser(user: User) {
-  userStore.deleteUser(user)
+async function handleDeleteUser(user: User) {
+  await userStore.deleteUser(user)
 }
 </script>
 

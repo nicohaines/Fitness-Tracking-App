@@ -43,7 +43,7 @@ function handleLogout() {
           <div class="navbar-item" v-if="userStore.currentUser">
             <div class="buttons">
               <a class="button is-link" @click="userStore.newWorkoutActive = !userStore.newWorkoutActive">
-                <i class="fa-solid fa-circle-plus"></i><strong>New Workout</strong>
+                <i class="fa-solid fa-circle-plus"></i><strong>&nbsp;New Workout</strong>
               </a>
             </div>
           </div>
@@ -64,7 +64,7 @@ function handleLogout() {
           <div class="navbar-item" v-if="!userStore.currentUser">
             <div class="buttons">
               <a class="button is-link" @click="userStore.loginActive = !userStore.loginActive">
-                <strong>Log in</strong>
+                <strong><i class="fa-solid fa-user"></i>&nbsp;Log in</strong>
               </a>
             </div>
           </div>

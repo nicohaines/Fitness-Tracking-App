@@ -58,7 +58,7 @@ watch(
   { immediate: true },
 )
 
-function handleSaveUser() {
+async function handleSaveUser() {
   if (!username.value.trim() || !displayName.value.trim()) {
     error.value = 'Username and display name are required.'
     return
@@ -67,14 +67,14 @@ function handleSaveUser() {
   error.value = ''
 
   const success = isEditMode.value
-    ? userStore.updateUser(
+    ? await userStore.updateUser(
         userStore.modifyUserTargetId as number,
         username.value,
         displayName.value,
         administrator.value,
         bio.value,
       )
-    : userStore.createUser(username.value, displayName.value, administrator.value, bio.value)
+    : await userStore.createUser(username.value, displayName.value, administrator.value, bio.value)
 
   if (success) {
     resetToCreateDefaults()

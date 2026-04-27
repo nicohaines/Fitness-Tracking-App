@@ -16,7 +16,7 @@ const userStore = useUserStore()
       <nav class="level">
         <div v-if="userStore.statistics(userStore.currentUser.id).favoriteWorkout" class="level-item has-text-centered">
           <div>
-            <p class="heading">Favorite Workout</p>
+            <p class="heading">Top Workout</p>
             <p class="title">{{ userStore.statistics(userStore.currentUser.id).favoriteWorkout }}</p>
           </div>
         </div>

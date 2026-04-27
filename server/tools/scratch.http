@@ -1,0 +1,128 @@
+###
+GET http://localhost:3000
+
+###
+GET http://localhost:3000/api/v1/users
+
+###
+GET http://localhost:3000/suny
+
+###
+GET http://localhost:3000/api/v1/users/1
+
+###
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+	"username": "server-tester",
+	"displayName": "Server Tester",
+	"administrator": false,
+	"bio": "created in scratch"
+}
+
+###
+PATCH http://localhost:3000/api/v1/users/11
+Content-Type: application/json
+
+{
+	"displayName": "Server Tester Updated"
+}
+
+###
+GET http://localhost:3000/api/v1/users/1/activities
+
+###
+POST http://localhost:3000/api/v1/users/1/activities
+Content-Type: application/json
+
+{
+	"type": "Running",
+	"intensity": "Medium",
+	"timeElapsed": 1800,
+	"distance": 2.5,
+	"notes": "activity from scratch"
+}
+
+###
+PATCH http://localhost:3000/api/v1/users/1/activities/4
+Content-Type: application/json
+
+{
+	"notes": "updated via scratch"
+}
+
+###
+GET http://localhost:3000/api/v1/users/1/friends
+
+###
+POST http://localhost:3000/api/v1/users/1/friends
+Content-Type: application/json
+
+{
+	"friendId": 10
+}
+
+###
+DELETE http://localhost:3000/api/v1/users/1/friends/10
+
+###
+GET http://localhost:3000/api/v1/activities/4/comments
+
+###
+POST http://localhost:3000/api/v1/activities/4/comments
+Content-Type: application/json
+
+{
+	"userId": 1,
+	"content": "Great workout"
+}
+
+###
+PATCH http://localhost:3000/api/v1/activities/4/comments/1
+Content-Type: application/json
+
+{
+	"content": "Great workout session"
+}
+
+###
+GET http://localhost:3000/api/v1/reactions/activity/4
+
+###
+POST http://localhost:3000/api/v1/reactions
+Content-Type: application/json
+
+{
+	"userId": 1,
+	"targetType": "activity",
+	"targetId": 4
+}
+
+###
+GET http://localhost:3000/api/v1/reactions/comment/1
+
+###
+POST http://localhost:3000/api/v1/reactions
+Content-Type: application/json
+
+{
+	"userId": 2,
+	"targetType": "comment",
+	"targetId": 1
+}
+
+###
+DELETE http://localhost:3000/api/v1/reactions/comment/1/2
+
+###
+DELETE http://localhost:3000/api/v1/activities/4/comments/1
+
+###
+DELETE http://localhost:3000/api/v1/reactions/activity/4/1
+
+###
+DELETE http://localhost:3000/api/v1/users/1/activities/4
+
+###
+DELETE http://localhost:3000/api/v1/users/11

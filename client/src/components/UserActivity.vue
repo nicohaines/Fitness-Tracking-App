@@ -16,6 +16,17 @@ function formatTime(time: number) {
     return timeFormatted
 }
 
+async function toggleReaction(activity: Activity) {
+  if (!userStore.currentUser) return
+
+  const hasReacted = activity.reactions?.some((r) => r.userId === userStore.currentUser?.id)
+  if (hasReacted) {
+    await userStore.removeReaction(userStore.currentUser.id, activity.id)
+  } else {
+    await userStore.addReaction(userStore.currentUser.id, activity.id)
+  }
+}
+
 </script>
 
 <template>
@@ -41,8 +52,9 @@ function formatTime(time: number) {
             
             <nav class="level is-mobile">
               <div class="level-left">
-                <a class="level-item">
-                  <span class="icon is-small heart"><i class="fas fa-heart" :class="{'red-heart': sortedActivity.reactions?.some((r) => r.userId === userStore.currentUser?.id)}"></i></span><span v-if="sortedActivity.reactions && sortedActivity.reactions.length > 0">&nbsp;{{ sortedActivity.reactions.length }}</span>
+                <a class="level-item" @click="toggleReaction(sortedActivity)">
+                  <span class="icon is-small heart"><i class="fas fa-heart" :class="{'red-heart': sortedActivity.reactions?.some((r) => r.userId === userStore.currentUser?.id)}"></i></span>
+                  <span v-if="sortedActivity.reactions && sortedActivity.reactions.length > 0">&nbsp;{{ sortedActivity.reactions.length }}</span>
                 </a>
               </div>
             </nav>

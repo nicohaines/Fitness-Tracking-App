@@ -4,10 +4,10 @@
     {
       "label": "Backend: Express Dev Server",
       "type": "shell",
-      "command": "sh",
+      "command": "npm",
       "args": [
-        "-c",
-        "if [ -f server/package.json ]; then npm run dev --prefix server; else echo '[backend] no server/package.json - skipping'; fi"
+        "run",
+        "dev"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -24,7 +24,7 @@
         "background": {
           "activeOnStart": true,
           "beginsPattern": ".*",
-          "endsPattern": "(\\[backend\\] no server/package.json - skipping|listening|ready|started|running|localhost)"
+          "endsPattern": "(listening|ready|started|running|localhost)"
         }
       }
     },

@@ -22,7 +22,7 @@ const weight = ref<number | null>(null)
 const comments = ref('')
 const error = ref('')
 
-function handleAddWorkout() {
+async function handleAddWorkout() {
   // Validate required fields
   if (!workoutType.value) {
     error.value = 'Please select a workout type.'
@@ -39,7 +39,7 @@ function handleAddWorkout() {
 
   error.value = ''
 
-  const success = userStore.addActivity(
+  const success = await userStore.addActivity(
     workoutType.value,
     intensity.value,
     totalSeconds,

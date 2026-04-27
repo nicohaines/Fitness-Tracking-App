@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/users'
 
@@ -9,15 +8,42 @@ const router = useRouter()
 
 const username = ref('')
 const error = ref('')
+const loadingUsers = ref(false)
 
-function handleLogin() {
+async function ensureUsersLoaded() {
+  if (loadingUsers.value || userStore.users.length > 0) return
+
+  loadingUsers.value = true
+  try {
+    await userStore.loadUsers()
+  } catch {
+    error.value = 'Unable to load users. Please make sure the backend server is running.'
+  } finally {
+    loadingUsers.value = false
+  }
+}
+
+onMounted(() => {
+  void ensureUsersLoaded()
+})
+
+watch(
+  () => userStore.loginActive,
+  (isOpen) => {
+    if (isOpen) {
+      void ensureUsersLoaded()
+    }
+  },
+)
+
+async function handleLogin() {
   if (!username.value) {
     error.value = 'Please select a username.'
     return
   }
 
   error.value = ''
-  const success = userStore.login(username.value.trim())
+  const success = await userStore.login(username.value.trim())
   if (success) {
     router.push({ name: 'home' })
   } else {
@@ -35,14 +61,15 @@ function handleLogin() {
           <label class="label">Username</label>
           <div class="control is-expanded">
             <div class="select is-fullwidth">
-              <select v-model="username">
+              <select v-model="username" :disabled="loadingUsers">
                 <option disabled value="">Select a user</option>
                 <option v-for="user in userStore.users" :key="user.id" :value="user.username">
-                  {{ user.username }}
+                  {{ user.displayName }} ({{ user.username }})
                 </option>
               </select>
             </div>
           </div>
+          <p v-if="loadingUsers" class="help">Loading users...</p>
           <p v-if="error" class="help is-danger">{{ error }}</p>
         </div>
         <div class="field">
