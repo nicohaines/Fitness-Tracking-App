@@ -1,6 +1,5 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import type { Activity, User } from '../types'
 
 type CreateUserInput = {
@@ -12,9 +11,6 @@ type CreateUserInput = {
 }
 
 type UpdateUserInput = Partial<CreateUserInput>
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 function loadSeedUsers(): User[] {
 	const filePath = path.resolve(__dirname, '../data/users.json')

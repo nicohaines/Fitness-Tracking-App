@@ -23,6 +23,6 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["server/**/*", "client/**/*"],
+  "include": ["server/**/*"],
   "exclude": ["node_modules", "dist"]
 }
