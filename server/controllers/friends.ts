@@ -12,27 +12,35 @@ function parseId(value: string): number {
 	return id
 }
 
-app.get('/', (req, res) => {
-	const userId = parseId((req.params as { userId: string }).userId)
-	const friendships = listFriendshipsByUser(userId)
-	const response: DataListEnvelope<Friendship> = {
-		data: friendships,
-		total: friendships.length,
-		isSuccess: true,
+app.get('/', async (req, res, next) => {
+	try {
+		const userId = parseId((req.params as { userId: string }).userId)
+		const friendships = await listFriendshipsByUser(userId)
+		const response: DataListEnvelope<Friendship> = {
+			data: friendships,
+			total: friendships.length,
+			isSuccess: true,
+		}
+		res.send(response)
+	} catch (err) {
+		next(err)
 	}
-	res.send(response)
 })
 
-app.post('/', (req, res) => {
-	const userId = parseId((req.params as { userId: string }).userId)
-	const friendId = parseId(String(req.body?.friendId))
-	const friendship = addFriendship(userId, friendId)
-	const response: DataEnvelope<Friendship> = {
-		data: friendship,
-		isSuccess: true,
-		message: 'friendship created',
+app.post('/', async (req, res, next) => {
+	try {
+		const userId = parseId((req.params as { userId: string }).userId)
+		const friendId = parseId(String(req.body?.friendId))
+		const friendship = await addFriendship(userId, friendId)
+		const response: DataEnvelope<Friendship> = {
+			data: friendship,
+			isSuccess: true,
+			message: 'friendship created',
+		}
+		res.status(201).send(response)
+	} catch (err) {
+		next(err)
 	}
-	res.status(201).send(response)
 })
 
 app.delete('/:friendId', (req, res) => {

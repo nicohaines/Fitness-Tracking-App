@@ -4,8 +4,8 @@ import express from "express"
 import usersController from "./controllers/users"
 import activitiesController from "./controllers/activities"
 import friendsController from "./controllers/friends"
-import commentsController from "./controllers/comments"
-import reactionsController from "./controllers/reactions"
+// import commentsController from "./controllers/comments"
+// import reactionsController from "./controllers/reactions"
 import { DataEnvelope } from "./types"
 
 
@@ -31,8 +31,8 @@ app.use(express.static(STATIC_DIR))
     .use("/api/v1/users", usersController)
     .use("/api/v1/users/:userId/activities", activitiesController)
     .use("/api/v1/users/:userId/friends", friendsController)
-    .use("/api/v1/activities/:activityId/comments", commentsController)
-    .use("/api/v1/reactions", reactionsController)
+    // .use("/api/v1/activities/:activityId/comments", commentsController)
+    // .use("/api/v1/reactions", reactionsController)
 
 app.use(
     (

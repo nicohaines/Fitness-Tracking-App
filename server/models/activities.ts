@@ -1,5 +1,8 @@
 import type { Activity } from '../types'
 import { getUserById } from './users'
+import { connect, toCamelCase, toSnakeCase } from './supabase'
+
+export const TABLE_NAME = "activities"
 
 type CreateActivityInput = {
 	type: string
@@ -13,28 +16,50 @@ type CreateActivityInput = {
 
 type UpdateActivityInput = Partial<CreateActivityInput>
 
-function nextActivityId(userId: number): number {
-	const user = getUserById(userId)
-	if (!user) {
-		throw Object.assign(new Error('user not found'), { status: 404 })
+function mapActivityRow(row: Record<string, unknown>): Activity {
+	const mapped = toCamelCase(row) as Partial<Activity>
+	return {
+		id: Number(mapped.id),
+		type: String(mapped.type ?? ''),
+		intensity: String(mapped.intensity ?? ''),
+		timeElapsed: Number(mapped.timeElapsed ?? 0),
+		date: String(mapped.date ?? ''),
+		distance: mapped.distance as number | undefined,
+		weight: mapped.weight as number | undefined,
+		notes: mapped.notes as string | undefined,
+		reactions: [],
 	}
-	return user.activity.length ? Math.max(...user.activity.map((a) => a.id)) + 1 : 1
 }
 
-export function listActivitiesByUser(userId: number): Activity[] {
-	const user = getUserById(userId)
-	if (!user) {
-		throw Object.assign(new Error('user not found'), { status: 404 })
+export async function listActivitiesByUser(userId: number): Promise<Activity[]> {
+	const db = connect()
+	const { data, error } = await db.from(TABLE_NAME).select('*', { count: 'estimated' }).eq('user_id', userId)
+
+	if (error) {
+		throw Object.assign(new Error(error.message), { status: 500 })
 	}
-	return user.activity
+
+	return (data ?? []).map((row) => mapActivityRow(row as Record<string, unknown>))
 }
 
-export function getActivityByUser(userId: number, activityId: number): Activity | undefined {
-	return listActivitiesByUser(userId).find((a) => a.id === activityId)
+export async function getActivityByUser(userId: number, activityId: number): Promise<Activity | undefined> {
+	const db = connect()
+	const { data, error } = await db
+		.from(TABLE_NAME)
+		.select('*')
+		.eq('user_id', userId)
+		.eq('id', activityId)
+		.maybeSingle()
+
+	if (error) {
+		throw Object.assign(new Error(error.message), { status: 500 })
+	}
+
+	return data ? mapActivityRow(data as Record<string, unknown>) : undefined
 }
 
-export function createActivityForUser(userId: number, input: CreateActivityInput): Activity {
-	const user = getUserById(userId)
+export async function createActivityForUser(userId: number, input: CreateActivityInput): Promise<Activity> {
+	const user = await getUserById(userId)
 	if (!user) {
 		throw Object.assign(new Error('user not found'), { status: 404 })
 	}
@@ -43,8 +68,9 @@ export function createActivityForUser(userId: number, input: CreateActivityInput
 		throw Object.assign(new Error('type, intensity, and positive timeElapsed are required'), { status: 400 })
 	}
 
-	const activity: Activity = {
-		id: nextActivityId(userId),
+	const db = connect()
+	const activity = {
+		userId,
 		type: input.type,
 		intensity: input.intensity,
 		timeElapsed: input.timeElapsed,
@@ -52,50 +78,89 @@ export function createActivityForUser(userId: number, input: CreateActivityInput
 		distance: input.distance,
 		weight: input.weight,
 		notes: input.notes,
-		reactions: [],
 	}
 
-	user.activity.unshift(activity)
-	return activity
+	const { data, error } = await db.from(TABLE_NAME).insert(toSnakeCase(activity)).select().single()
+
+	if (error) {
+		throw Object.assign(new Error(error.message), { status: 500 })
+	}
+
+	return mapActivityRow(data as Record<string, unknown>)
 }
 
-export function updateActivityForUser(
+export async function updateActivityForUser(
 	userId: number,
 	activityId: number,
 	patch: UpdateActivityInput,
-): Activity {
-	const activity = getActivityByUser(userId, activityId)
-	if (!activity) {
-		throw Object.assign(new Error('activity not found'), { status: 404 })
-	}
-
-	if (patch.type !== undefined) activity.type = patch.type
-	if (patch.intensity !== undefined) activity.intensity = patch.intensity
-	if (patch.timeElapsed !== undefined) {
-		if (patch.timeElapsed <= 0) {
-			throw Object.assign(new Error('timeElapsed must be positive'), { status: 400 })
-		}
-		activity.timeElapsed = patch.timeElapsed
-	}
-	if (patch.date !== undefined) activity.date = patch.date
-	if (patch.distance !== undefined) activity.distance = patch.distance
-	if (patch.weight !== undefined) activity.weight = patch.weight
-	if (patch.notes !== undefined) activity.notes = patch.notes
-
-	return activity
-}
-
-export function deleteActivityForUser(userId: number, activityId: number): Activity {
-	const user = getUserById(userId)
+): Promise<Activity> {
+	const user = await getUserById(userId)
 	if (!user) {
 		throw Object.assign(new Error('user not found'), { status: 404 })
 	}
 
-	const index = user.activity.findIndex((a) => a.id === activityId)
-	if (index < 0) {
+	const activity = await getActivityByUser(userId, activityId)
+	if (!activity) {
 		throw Object.assign(new Error('activity not found'), { status: 404 })
 	}
 
-	const [removed] = user.activity.splice(index, 1)
-	return removed
+	const patchRow: Record<string, unknown> = {}
+	if (patch.type !== undefined) patchRow.type = patch.type
+	if (patch.intensity !== undefined) patchRow.intensity = patch.intensity
+	if (patch.timeElapsed !== undefined) {
+		if (patch.timeElapsed <= 0) {
+			throw Object.assign(new Error('timeElapsed must be positive'), { status: 400 })
+		}
+		patchRow.timeElapsed = patch.timeElapsed
+	}
+	if (patch.date !== undefined) patchRow.date = patch.date
+	if (patch.distance !== undefined) patchRow.distance = patch.distance
+	if (patch.weight !== undefined) patchRow.weight = patch.weight
+	if (patch.notes !== undefined) patchRow.notes = patch.notes
+
+	if (Object.keys(patchRow).length === 0) {
+		return activity
+	}
+
+	const db = connect()
+	const { data, error } = await db
+		.from(TABLE_NAME)
+		.update(toSnakeCase(patchRow))
+		.eq('id', activityId)
+		.eq('user_id', userId)
+		.select()
+		.single()
+
+	if (error) {
+		throw Object.assign(new Error(error.message), { status: 500 })
+	}
+
+	return mapActivityRow(data as Record<string, unknown>)
+}
+
+export async function deleteActivityForUser(userId: number, activityId: number): Promise<Activity> {
+	const user = await getUserById(userId)
+	if (!user) {
+		throw Object.assign(new Error('user not found'), { status: 404 })
+	}
+
+	const existing = await getActivityByUser(userId, activityId)
+	if (!existing) {
+		throw Object.assign(new Error('activity not found'), { status: 404 })
+	}
+
+	const db = connect()
+	const { data, error } = await db
+		.from(TABLE_NAME)
+		.delete()
+		.eq('id', activityId)
+		.eq('user_id', userId)
+		.select()
+		.single()
+
+	if (error) {
+		throw Object.assign(new Error(error.message), { status: 500 })
+	}
+
+	return mapActivityRow(data as Record<string, unknown>)
 }

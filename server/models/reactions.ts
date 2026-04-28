@@ -1,3 +1,5 @@
+//This is intended to be a future feature and is not functional.
+
 import type { ReactionRecord, ReactionTargetType } from '../types'
 import { commentExists } from './comments'
 import { activityExists, userExists } from './users'
@@ -14,9 +16,9 @@ function nextReactionId(): number {
 	return reactions.length ? Math.max(...reactions.map((r) => r.id)) + 1 : 1
 }
 
-function targetExists(targetType: ReactionTargetType, targetId: number): boolean {
-	if (targetType === 'activity') return activityExists(targetId)
-	if (targetType === 'comment') return commentExists(targetId)
+async function targetExists(targetType: ReactionTargetType, targetId: number): Promise<boolean> {
+	if (targetType === 'activity') await activityExists(targetId)
+	if (targetType === 'comment') await commentExists(targetId)
 	return false
 }
 

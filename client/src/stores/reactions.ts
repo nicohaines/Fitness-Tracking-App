@@ -1,3 +1,5 @@
+//This is intended to be a future feature and is not yet functional.
+
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { api } from '../services/myFetch'

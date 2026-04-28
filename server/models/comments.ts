@@ -1,3 +1,5 @@
+//This is intended to be a future feature and is not functional.
+
 import type { Comment } from '../types'
 import { activityExists, userExists } from './users'
 
