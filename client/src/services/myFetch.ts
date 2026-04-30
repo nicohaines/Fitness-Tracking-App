@@ -5,6 +5,8 @@ export default function rest<T>(
   data?: unknown,
   options: RequestInit = {},
 ): Promise<T> {
+  const token = typeof window !== 'undefined' ? window.localStorage.getItem('authToken') : null
+
   options = {
     method: data ? 'POST' : 'GET',
 
@@ -13,6 +15,7 @@ export default function rest<T>(
 
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
     },
   }

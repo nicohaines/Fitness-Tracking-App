@@ -4,10 +4,9 @@ import express from "express"
 import usersController from "./controllers/users"
 import activitiesController from "./controllers/activities"
 import friendsController from "./controllers/friends"
-// import commentsController from "./controllers/comments"
-// import reactionsController from "./controllers/reactions"
+import reactionsController from "./controllers/reactions"
 import { DataEnvelope } from "./types"
-
+import { requireAuth, validateJWT } from "./middleware/auth"
 
 const PORT = process.env.PORT ?? 3000
 const SERVER = process.env.SERVER ?? "localhost"
@@ -16,12 +15,20 @@ const STATIC_DIR = process.env.STATIC_DIR ?? "client/dist"
 const app = express()
 
 ///////// Middleware
-app.use((_req, res, next) => {
+app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*")
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE")
     res.setHeader("Access-Control-Allow-Headers", "*")
+
+    if (req.method === "OPTIONS") {
+        res.sendStatus(200)
+        return
+    }
+
     next()
-}).use(express.json())
+})
+    .use(express.json())
+    .use(validateJWT)
 
 app.use(express.static(STATIC_DIR))
 
@@ -29,10 +36,9 @@ app.use(express.static(STATIC_DIR))
         res.send("The best plan of my life!")
     })
     .use("/api/v1/users", usersController)
-    .use("/api/v1/users/:userId/activities", activitiesController)
-    .use("/api/v1/users/:userId/friends", friendsController)
-    // .use("/api/v1/activities/:activityId/comments", commentsController)
-    // .use("/api/v1/reactions", reactionsController)
+    .use("/api/v1/users/:userId/activities", requireAuth(), activitiesController)
+    .use("/api/v1/users/:userId/friends", requireAuth(), friendsController)
+    .use("/api/v1/reactions", requireAuth(), reactionsController)
 
 app.use(
     (

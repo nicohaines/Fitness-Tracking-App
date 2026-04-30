@@ -1,8 +1,7 @@
 import { Router } from 'express'
-import { createUser, deleteUser, getUserById, listUsers, updateUser } from '../models/users'
+import { createUser, deleteUser, getUserById, listUsers, updateUser, login } from '../models/users'
 import type { DataEnvelope, DataListEnvelope, User } from '../types'
-
-const app = Router()
+import { requireAuth } from "../middleware/auth"
 
 function parseId(value: string): number {
   const id = Number.parseInt(value, 10)
@@ -10,6 +9,12 @@ function parseId(value: string): number {
     throw Object.assign(new Error('invalid id parameter'), { status: 400 })
   }
   return id
+}
+
+const app = Router()
+
+function isSelfOrAdmin(req: import('express').Request, id: number): boolean {
+  return Boolean(req.user && (req.user.administrator || req.user.id === id))
 }
 
 app.get('/', async (_req, res, next) => {
@@ -26,7 +31,7 @@ app.get('/', async (_req, res, next) => {
   }
 })
 
-app.get('/:id', async (req, res, next) => {
+.get('/:id', requireAuth(false), async (req, res, next) => {
   try {
     const user = await getUserById(parseId(req.params.id))
     if (!user) {
@@ -43,7 +48,7 @@ app.get('/:id', async (req, res, next) => {
   }
 })
 
-app.post('/', async (req, res, next) => {
+.post('/', requireAuth(true), async (req, res, next) => {
   try {
     const user = await createUser(req.body)
     const response: DataEnvelope<User> = {
@@ -57,9 +62,24 @@ app.post('/', async (req, res, next) => {
   }
 })
 
-app.patch('/:id', async (req, res, next) => {
+ .post("/login", async (req, res) => {
+        const { username, email, password } = req.body
+
+        const response: DataEnvelope<{ token: string; user: User }> = {
+            data: await login(username ?? email, password),
+            isSuccess: true,
+        }
+        res.send(response)
+    })
+
+.patch('/:id', requireAuth(false), async (req, res, next) => {
   try {
-    const user = await updateUser(parseId(req.params.id), req.body)
+    const userId = parseId(req.params.id)
+    if (!isSelfOrAdmin(req, userId)) {
+      throw Object.assign(new Error('forbidden'), { status: 403 })
+    }
+
+    const user = await updateUser(userId, req.body)
     const response: DataEnvelope<User> = {
       data: user,
       isSuccess: true,
@@ -71,9 +91,13 @@ app.patch('/:id', async (req, res, next) => {
   }
 })
 
-app.delete('/:id', async (req, res, next) => {
+.delete('/:id', requireAuth(false), async (req, res, next) => {
   try {
     const userId = parseId(req.params.id)
+    if (!isSelfOrAdmin(req, userId)) {
+      throw Object.assign(new Error('forbidden'), { status: 403 })
+    }
+
     const existing = await getUserById(userId)
     if (!existing) {
       throw Object.assign(new Error('user not found'), { status: 404 })

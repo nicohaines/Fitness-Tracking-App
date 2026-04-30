@@ -1,3 +1,4 @@
+import { sign } from "jsonwebtoken"
 import { type Activity, type User, userKeys} from '../types'
 import { connect, toCamelCase, toSnakeCase, filterKeys } from './supabase'
 import data1 from "../data/users.json"
@@ -21,6 +22,48 @@ type CreateUserInput = {
 }
 
 type UpdateUserInput = Partial<CreateUserInput>
+
+export async function login(
+    username: string,
+    _password: string,
+): Promise<{ token: string; user: ItemType }> {
+	const normalizedUsername = username?.trim()
+	if (!normalizedUsername) {
+		throw Object.assign(new Error('username is required'), { status: 400 })
+	}
+
+    const db = connect()
+    const result = await db
+        .from(TABLE_NAME)
+        .select("*")
+		.eq("username", normalizedUsername)
+        .single()
+    if (result.error) {
+		throw result.error
+    }
+    const user = toCamelCase(result.data) as ItemType
+
+	const payload = {
+		id: user.id,
+		username: user.username,
+		administrator: user.administrator,
+	}
+
+    return new Promise((resolve, reject) => {
+        sign(
+			payload,
+            process.env.JWT_SECRET || "secret",
+            { expiresIn: "1h" },
+            (err, token) => {
+                if (err || !token) {
+                    reject(err || new Error("Token generation failed"))
+                    return
+                }
+                resolve({ token, user })
+            },
+        )
+    })
+}
 
 function mapActivityRow(row: Record<string, unknown>): Activity {
 	const activity = toCamelCase(row) as Partial<Activity>

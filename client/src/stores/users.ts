@@ -79,22 +79,32 @@ export const useUserStore = defineStore('user', () => {
     const trimmed = username.trim()
     if (!trimmed) return false
 
-    if (!users.value.length) {
-      await loadUsers()
-    }
+    try {
+      const auth = await api<DataEnvelope<{ token: string; user: User }>>('/api/v1/users/login', {
+        username: trimmed,
+        password: '',
+      }, {
+        method: 'POST',
+      })
 
-    const match = users.value.find((u) => u.username.toLowerCase() === trimmed.toLowerCase())
-    if (match) {
-      currentUser.value = match
+      window.localStorage.setItem('authToken', auth.data.token)
+
+      await loadUsers()
+      const match = users.value.find((u) => u.username.toLowerCase() === trimmed.toLowerCase())
+      const loggedIn = match ?? auth.data.user
+
+      currentUser.value = loggedIn
       loginActive.value = false
-      displayProfileUser.value = match
-      await activitiesStore.loadActivities(match.id)
+      displayProfileUser.value = loggedIn
+      await activitiesStore.loadActivities(loggedIn.id)
       return true
+    } catch {
+      return false
     }
-    return false
   }
 
   function logout() {
+    window.localStorage.removeItem('authToken')
     currentUser.value = null
     displayProfileUser.value = null
   }
