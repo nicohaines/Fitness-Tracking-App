@@ -43,11 +43,11 @@ app.post('/', async (req, res, next) => {
 	}
 })
 
-app.delete('/:friendId', (req, res) => {
+app.delete('/:friendId', async (req, res) => {
 	const params = req.params as { userId: string; friendId: string }
 	const userId = parseId(params.userId)
 	const friendId = parseId(params.friendId)
-	const removed = removeFriendship(userId, friendId)
+	const removed = await removeFriendship(userId, friendId)
 	const response: DataEnvelope<Friendship> = {
 		data: removed,
 		isSuccess: true,

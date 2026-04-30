@@ -1,7 +1,7 @@
 //This is intended to be a future feature and is not functional.
 
 import type { ReactionRecord, ReactionTargetType } from '../types'
-import { commentExists } from './comments'
+// import { commentExists } from './comments'
 import { activityExists, userExists } from './users'
 
 type CreateReactionInput = {
@@ -18,7 +18,7 @@ function nextReactionId(): number {
 
 async function targetExists(targetType: ReactionTargetType, targetId: number): Promise<boolean> {
 	if (targetType === 'activity') await activityExists(targetId)
-	if (targetType === 'comment') await commentExists(targetId)
+	// if (targetType === 'comment') await commentExists(targetId)
 	return false
 }
 

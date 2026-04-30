@@ -20,8 +20,8 @@ function parseId(value: string): number {
 }
 
 function parseTargetType(value: string): ReactionTargetType {
-	if (value !== 'activity' && value !== 'comment') {
-		throw Object.assign(new Error('targetType must be activity or comment'), { status: 400 })
+	if (value !== 'activity') {
+		throw Object.assign(new Error('targetType must be activity'), { status: 400 })
 	}
 	return value
 }

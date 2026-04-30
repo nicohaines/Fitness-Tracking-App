@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { removeFriendshipsForUser } from '../models/friends'
 import { createUser, deleteUser, getUserById, listUsers, updateUser } from '../models/users'
 import type { DataEnvelope, DataListEnvelope, User } from '../types'
 
@@ -79,16 +78,6 @@ app.delete('/:id', async (req, res, next) => {
     if (!existing) {
       throw Object.assign(new Error('user not found'), { status: 404 })
     }
-
-    // TODO: restore activity reaction cleanup when reactions are migrated to Supabase.
-    // for (const activity of existing.activity) {
-    // 	await deleteReactionsByTarget('activity', activity.id)
-    // }
-    await removeFriendshipsForUser(userId)
-    // TODO: restore comment and reaction cleanup when those features are migrated.
-    // await deleteCommentsByUser(userId)
-    // await deleteReactionsByUser(userId)
-
     const removed = await deleteUser(userId)
     const response: DataEnvelope<User> = {
       data: removed,
