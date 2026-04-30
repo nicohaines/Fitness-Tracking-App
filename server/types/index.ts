@@ -12,6 +12,14 @@ export type User = {
   activity: Activity[]
 }
 
+export const userKeys = [
+    "username",
+    "displayName",
+    "administrator",
+    "bio",
+    "profilePicture",
+]
+
 export type Activity = {
   id: number
   timeElapsed: number //seconds

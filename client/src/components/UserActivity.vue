@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { capitalize, computed } from 'vue'
 import { useUserStore } from '../stores/users'
 import type { Activity } from '../../types'
 
@@ -42,7 +42,7 @@ async function toggleReaction(activity: Activity) {
           <div class="media-content">
             <div class="content">
               <p>
-                <strong>{{ sortedActivity.type }}:</strong> <small>{{ sortedActivity.intensity }} Intensity</small> | <small>{{ formatTime(sortedActivity.timeElapsed) }}</small> | <small>{{ sortedActivity.date }}</small>
+                <strong>{{ sortedActivity.type }}:</strong> <small>{{ sortedActivity.intensity.toUpperCase() }} Intensity</small> | <small>{{ formatTime(sortedActivity.timeElapsed) }}</small> | <small>{{ sortedActivity.date }}</small>
                 <div v-if="sortedActivity.distance"><strong>Distance:</strong> {{ sortedActivity.distance }} miles</div>
                 <div v-if="sortedActivity.weight"><strong>Weight:</strong> {{ sortedActivity.weight }} lbs</div>
                 <div v-if="sortedActivity.notes"> {{ sortedActivity.notes}} </div>

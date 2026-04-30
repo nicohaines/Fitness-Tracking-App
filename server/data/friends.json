@@ -1,0 +1,21 @@
+{
+  "friendships": [
+    { "userId1": 1, "userId2": 2 },
+    { "userId1": 1, "userId2": 3 },
+    { "userId1": 1, "userId2": 4 },
+    { "userId1": 1, "userId2": 7 },
+    { "userId1": 1, "userId2": 9 },
+    { "userId1": 2, "userId2": 3 },
+    { "userId1": 2, "userId2": 5 },
+    { "userId1": 2, "userId2": 8 },
+    { "userId1": 3, "userId2": 6 },
+    { "userId1": 4, "userId2": 5 },
+    { "userId1": 4, "userId2": 7 },
+    { "userId1": 5, "userId2": 6 },
+    { "userId1": 5, "userId2": 10 },
+    { "userId1": 6, "userId2": 8 },
+    { "userId1": 7, "userId2": 9 },
+    { "userId1": 8, "userId2": 10 },
+    { "userId1": 9, "userId2": 10 }
+  ]
+}

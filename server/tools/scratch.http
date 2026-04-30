@@ -99,6 +99,15 @@ Content-Type: application/json
 	"targetId": 4
 }
 
+### Test: Get user 1 and check friends array is populated
+GET http://localhost:3000/api/v1/users/1
+
+### Test: Get friendships for user 1
+GET http://localhost:3000/api/v1/users/1/friends
+
+### Test: Get all users and verify user 1 has friends populated
+GET http://localhost:3000/api/v1/users
+
 ###
 GET http://localhost:3000/api/v1/reactions/comment/1
 

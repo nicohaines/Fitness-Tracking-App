@@ -1,8 +1,14 @@
 import type { Activity } from '../types'
 import { getUserById } from './users'
 import { connect, toCamelCase, toSnakeCase } from './supabase'
+import data1 from "../data/users.json"
 
 export const TABLE_NAME = "activities"
+
+const data = {
+	...data1,
+	items: data1.users,
+}
 
 type CreateActivityInput = {
 	type: string
@@ -72,7 +78,7 @@ export async function createActivityForUser(userId: number, input: CreateActivit
 	const activity = {
 		userId,
 		type: input.type,
-		intensity: input.intensity,
+		intensity: String(input.intensity ?? '').toLowerCase(),
 		timeElapsed: input.timeElapsed,
 		date: input.date ?? new Date().toISOString().slice(0, 10),
 		distance: input.distance,
@@ -83,7 +89,8 @@ export async function createActivityForUser(userId: number, input: CreateActivit
 	const { data, error } = await db.from(TABLE_NAME).insert(toSnakeCase(activity)).select().single()
 
 	if (error) {
-		throw Object.assign(new Error(error.message), { status: 500 })
+		console.error('createActivityForUser db error:', error)
+		throw Object.assign(new Error(error.message ?? 'db error'), { status: 500, details: error })
 	}
 
 	return mapActivityRow(data as Record<string, unknown>)
@@ -106,7 +113,7 @@ export async function updateActivityForUser(
 
 	const patchRow: Record<string, unknown> = {}
 	if (patch.type !== undefined) patchRow.type = patch.type
-	if (patch.intensity !== undefined) patchRow.intensity = patch.intensity
+	if (patch.intensity !== undefined) patchRow.intensity = String(patch.intensity).toLowerCase()
 	if (patch.timeElapsed !== undefined) {
 		if (patch.timeElapsed <= 0) {
 			throw Object.assign(new Error('timeElapsed must be positive'), { status: 400 })
@@ -163,4 +170,33 @@ export async function deleteActivityForUser(userId: number, activityId: number):
 	}
 
 	return mapActivityRow(data as Record<string, unknown>)
+}
+
+export async function seed(): Promise<number> {
+	const db = connect()
+	let seededActivities = 0
+
+	for (const user of data.items) {
+		const userId = user.id
+		const activities = (user.activity ?? []).map((entry: any) => ({
+			user_id: userId,
+			type: entry.type,
+			intensity: entry.intensity.toLowerCase(),
+			time_elapsed: entry.timeElapsed,
+			date: entry.date,
+			distance: entry.distance ?? null,
+			weight: entry.weight ?? null,
+			notes: entry.notes ?? null,
+		}))
+
+		if (activities.length > 0) {
+			const result = await db.from(TABLE_NAME).insert(activities)
+			if (result.error) {
+				throw result.error
+			}
+			seededActivities += activities.length
+		}
+	}
+
+	return seededActivities
 }

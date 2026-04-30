@@ -1,36 +1,13 @@
-import type { Activity, User } from '../types'
+import { type Activity, type User, userKeys} from '../types'
 import { connect, toCamelCase, toSnakeCase, filterKeys } from './supabase'
 import data1 from "../data/users.json"
 
 type ItemType = User
-type SeedUser = Pick<
-	ItemType,
-	'username' | 'displayName' | 'administrator' | 'profilePicture' | 'bio' | 'reactions'
->
-type SeedActivity = Omit<Activity, 'id' | 'reactions'>
 
 const data = {
-    items: data1 as ItemType[],
+    ...data1,
+    items: data1.users,
 }
-
-const USER_SEED_KEYS: (keyof SeedUser)[] = [
-	'username',
-	'displayName',
-	'administrator',
-	'profilePicture',
-	'bio',
-	'reactions',
-]
-
-const ACTIVITY_SEED_KEYS: (keyof SeedActivity)[] = [
-	'type',
-	'intensity',
-	'timeElapsed',
-	'date',
-	'distance',
-	'weight',
-	'notes',
-]
 
 export const TABLE_NAME = "users"
 const ACTIVITIES_TABLE_NAME = 'activities'
@@ -60,14 +37,14 @@ function mapActivityRow(row: Record<string, unknown>): Activity {
 	}
 }
 
-function mapUserRow(row: Record<string, unknown>, activity: Activity[] = []): ItemType {
+function mapUserRow(row: Record<string, unknown>, activity: Activity[] = [], friends: number[] = []): ItemType {
 	const user = toCamelCase(row) as Partial<User>
 	return {
 		id: Number(user.id),
 		username: String(user.username ?? ''),
 		displayName: String(user.displayName ?? ''),
 		administrator: Boolean(user.administrator),
-		friends: Array.isArray(user.friends) ? (user.friends as number[]) : [],
+		friends,
 		profilePicture: user.profilePicture as string | undefined,
 		bio: user.bio as string | undefined,
 		reactions: Number(user.reactions ?? 0),
@@ -119,9 +96,42 @@ export async function listUsers(): Promise<ItemType[]> {
 	}
 
 	const rows = (data ?? []) as Record<string, unknown>[]
-	const activitiesByUser = await listActivitiesByUsers(rows.map((row) => Number(row.id)))
+	const ids = rows.map((row) => Number(row.id))
+	const activitiesByUser = await listActivitiesByUsers(ids)
 
-	return rows.map((row) => mapUserRow(row, activitiesByUser.get(Number(row.id)) ?? []))
+	// Build friends map from friendships table
+	const friendsMap = new Map<number, number[]>()
+	if (ids.length > 0) {
+		const { data: aRows, error: aErr } = await db
+			.from('friendships')
+			.select('*')
+			.in('user_a_id', ids)
+		if (aErr) throw Object.assign(new Error(aErr.message), { status: 500 })
+		
+		const { data: bRows, error: bErr } = await db
+			.from('friendships')
+			.select('*')
+			.in('user_b_id', ids)
+		if (bErr) throw Object.assign(new Error(bErr.message), { status: 500 })
+
+		for (const r of [...(aRows ?? []), ...(bRows ?? [])] as any[]) {
+			const a = Number(r.user_a_id)
+			const b = Number(r.user_b_id)
+
+			const listA = friendsMap.get(a) ?? []
+			if (!listA.includes(b)) listA.push(b)
+			friendsMap.set(a, listA)
+
+			const listB = friendsMap.get(b) ?? []
+			if (!listB.includes(a)) listB.push(a)
+			friendsMap.set(b, listB)
+		}
+	}
+
+	return rows.map((row) => {
+		const id = Number(row.id)
+		return mapUserRow(row, activitiesByUser.get(id) ?? [], friendsMap.get(id) ?? [])
+	})
 }
 
 export async function getUserById(userId: number): Promise<ItemType | undefined> {
@@ -136,7 +146,17 @@ export async function getUserById(userId: number): Promise<ItemType | undefined>
 		return undefined
 	}
 
-	return mapUserRow(data as Record<string, unknown>, await listActivitiesByUser(userId))
+	// fetch friendships for this user
+	const friends: number[] = []
+	const { data: aRows, error: aErr } = await db.from('friendships').select('user_b_id').eq('user_a_id', userId)
+	if (aErr) throw Object.assign(new Error(aErr.message), { status: 500 })
+	for (const r of (aRows ?? []) as any[]) friends.push(Number(r.user_b_id))
+	
+	const { data: bRows, error: bErr } = await db.from('friendships').select('user_a_id').eq('user_b_id', userId)
+	if (bErr) throw Object.assign(new Error(bErr.message), { status: 500 })
+	for (const r of (bRows ?? []) as any[]) friends.push(Number(r.user_a_id))
+
+	return mapUserRow(data as Record<string, unknown>, await listActivitiesByUser(userId), friends)
 }
 
 export async function userExists(userId: number): Promise<boolean> {
@@ -306,35 +326,22 @@ export async function activityExists(activityId: number): Promise<boolean> {
 
 export async function seed() {
 	const db = connect()
-	let seededUsers = 0
 
-	for (const item of data.items) {
-		const { activity = [], id: _ignoredId, friends: _ignoredFriends, ...userSeed } = item
-		const userSeedRow = userSeed as SeedUser
-		const userResult = await db
-			.from(TABLE_NAME)
-			.insert(toSnakeCase(filterKeys(userSeedRow, USER_SEED_KEYS)))
-			.select('id')
-			.single()
-
-		if (userResult.error) {
-			throw userResult.error
+	const items = data.items.map((item) => {
+		const base = toSnakeCase(filterKeys(item, userKeys as any)) as Record<string, unknown>
+		return {
+			id: item.id,
+			...base,
+			reactions: item.reactions ?? 0,
 		}
+	})
 
-		seededUsers += 1
-		const userId = Number(userResult.data.id)
-		const activities = activity.map((entry) => ({
-			userId,
-			...toSnakeCase(filterKeys(entry as SeedActivity, ACTIVITY_SEED_KEYS)),
-		}))
-
-		if (activities.length > 0) {
-			const activityResult = await db.from(ACTIVITIES_TABLE_NAME).insert(activities)
-			if (activityResult.error) {
-				throw activityResult.error
-			}
-		}
+	// Use upsert with onConflict on `id` so existing rows are updated to match JSON
+	const result = await db.from(TABLE_NAME).upsert(items, { onConflict: 'id' }).select()
+	if (result.error) {
+		throw result.error
 	}
 
-	return seededUsers
+	// Return number of users processed (either inserted or updated)
+	return (result.data ?? []).length
 }
