@@ -1,6 +1,7 @@
 import { sign } from "jsonwebtoken"
 import { type Activity, type User, userKeys} from '../types'
 import { connect, toCamelCase, toSnakeCase, filterKeys } from './supabase'
+import { listReactionsByTargetIds } from './reactions'
 import data1 from "../data/users.json"
 
 type ItemType = User
@@ -103,7 +104,13 @@ async function listActivitiesByUser(userId: number): Promise<Activity[]> {
 		throw Object.assign(new Error(error.message), { status: 500 })
 	}
 
-	return (data ?? []).map((row) => mapActivityRow(row as Record<string, unknown>))
+	const activities = (data ?? []).map((row) => mapActivityRow(row as Record<string, unknown>))
+	const reactionsByActivity = await listReactionsByTargetIds('activity', activities.map((activity) => activity.id))
+
+	return activities.map((activity) => ({
+		...activity,
+		reactions: reactionsByActivity.get(activity.id) ?? [],
+	}))
 }
 
 async function listActivitiesByUsers(userIds: number[]): Promise<Map<number, Activity[]>> {
@@ -121,6 +128,19 @@ async function listActivitiesByUsers(userIds: number[]): Promise<Map<number, Act
 	const grouped = new Map<number, Activity[]>()
 	for (const row of data ?? []) {
 		const activityRow = row as Record<string, unknown>
+	const allActivityIds = [...grouped.values()].flat().map((activity) => activity.id)
+	const reactionsByActivity = await listReactionsByTargetIds('activity', allActivityIds)
+
+	for (const [userId, activities] of grouped.entries()) {
+		grouped.set(
+			userId,
+			activities.map((activity) => ({
+				...activity,
+				reactions: reactionsByActivity.get(activity.id) ?? [],
+			})),
+		)
+	}
+
 		const userId = Number(activityRow.user_id)
 		const list = grouped.get(userId) ?? []
 		list.push(mapActivityRow(activityRow))
@@ -145,17 +165,17 @@ export async function listUsers(): Promise<ItemType[]> {
 	// Build friends map from friendships table
 	const friendsMap = new Map<number, number[]>()
 	if (ids.length > 0) {
-		const { data: aRows, error: aErr } = await db
+		const { data: aRows, error: aError } = await db
 			.from('friendships')
 			.select('*')
 			.in('user_a_id', ids)
-		if (aErr) throw Object.assign(new Error(aErr.message), { status: 500 })
-		
-		const { data: bRows, error: bErr } = await db
+		if (aError) throw Object.assign(new Error(aError.message), { status: 500 })
+
+		const { data: bRows, error: bError } = await db
 			.from('friendships')
 			.select('*')
 			.in('user_b_id', ids)
-		if (bErr) throw Object.assign(new Error(bErr.message), { status: 500 })
+		if (bError) throw Object.assign(new Error(bError.message), { status: 500 })
 
 		for (const r of [...(aRows ?? []), ...(bRows ?? [])] as any[]) {
 			const a = Number(r.user_a_id)
@@ -173,7 +193,9 @@ export async function listUsers(): Promise<ItemType[]> {
 
 	return rows.map((row) => {
 		const id = Number(row.id)
-		return mapUserRow(row, activitiesByUser.get(id) ?? [], friendsMap.get(id) ?? [])
+		const activities = activitiesByUser.get(id) ?? []
+		const reactions = activities.reduce((total, activity) => total + activity.reactions.length, 0)
+		return mapUserRow({ ...row, reactions }, activities, friendsMap.get(id) ?? [])
 	})
 }
 
@@ -191,15 +213,17 @@ export async function getUserById(userId: number): Promise<ItemType | undefined>
 
 	// fetch friendships for this user
 	const friends: number[] = []
-	const { data: aRows, error: aErr } = await db.from('friendships').select('user_b_id').eq('user_a_id', userId)
-	if (aErr) throw Object.assign(new Error(aErr.message), { status: 500 })
+	const { data: aRows, error: aError } = await db.from('friendships').select('user_b_id').eq('user_a_id', userId)
+	if (aError) throw Object.assign(new Error(aError.message), { status: 500 })
 	for (const r of (aRows ?? []) as any[]) friends.push(Number(r.user_b_id))
-	
-	const { data: bRows, error: bErr } = await db.from('friendships').select('user_a_id').eq('user_b_id', userId)
-	if (bErr) throw Object.assign(new Error(bErr.message), { status: 500 })
+
+	const { data: bRows, error: bError } = await db.from('friendships').select('user_a_id').eq('user_b_id', userId)
+	if (bError) throw Object.assign(new Error(bError.message), { status: 500 })
 	for (const r of (bRows ?? []) as any[]) friends.push(Number(r.user_a_id))
 
-	return mapUserRow(data as Record<string, unknown>, await listActivitiesByUser(userId), friends)
+	const activities = await listActivitiesByUser(userId)
+	const reactions = activities.reduce((total, activity) => total + activity.reactions.length, 0)
+	return mapUserRow({ ...(data as Record<string, unknown>), reactions }, activities, friends)
 }
 
 export async function userExists(userId: number): Promise<boolean> {

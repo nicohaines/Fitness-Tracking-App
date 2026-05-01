@@ -1,0 +1,24 @@
+{
+  "reactions": [
+    { "userId": 2, "targetType": "activity", "targetId": 1 },
+    { "userId": 3, "targetType": "activity", "targetId": 1 },
+    { "userId": 4, "targetType": "activity", "targetId": 1 },
+    { "userId": 5, "targetType": "activity", "targetId": 2 },
+    { "userId": 6, "targetType": "activity", "targetId": 2 },
+    { "userId": 1, "targetType": "activity", "targetId": 4 },
+    { "userId": 7, "targetType": "activity", "targetId": 5 },
+    { "userId": 8, "targetType": "activity", "targetId": 6 },
+    { "userId": 9, "targetType": "activity", "targetId": 7 },
+    { "userId": 10, "targetType": "activity", "targetId": 8 },
+    { "userId": 2, "targetType": "activity", "targetId": 9 },
+    { "userId": 3, "targetType": "activity", "targetId": 10 },
+    { "userId": 4, "targetType": "activity", "targetId": 11 },
+    { "userId": 5, "targetType": "activity", "targetId": 12 },
+    { "userId": 6, "targetType": "activity", "targetId": 13 },
+    { "userId": 7, "targetType": "activity", "targetId": 14 },
+    { "userId": 8, "targetType": "activity", "targetId": 15 },
+    { "userId": 9, "targetType": "activity", "targetId": 16 },
+    { "userId": 10, "targetType": "activity", "targetId": 17 },
+    { "userId": 1, "targetType": "activity", "targetId": 18 }
+  ]
+}

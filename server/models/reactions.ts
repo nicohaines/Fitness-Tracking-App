@@ -1,8 +1,8 @@
-//This is intended to be a future feature and is not functional.
-
 import type { ReactionRecord, ReactionTargetType } from '../types'
-// import { commentExists } from './comments'
-import { activityExists, userExists } from './users'
+import { connect, toCamelCase, toSnakeCase } from './supabase'
+import reactionsData from '../data/reactions.json'
+
+export const TABLE_NAME = 'reactions'
 
 type CreateReactionInput = {
 	userId: number
@@ -10,76 +10,188 @@ type CreateReactionInput = {
 	targetId: number
 }
 
-let reactions: ReactionRecord[] = []
+function mapReactionRow(row: Record<string, unknown>): ReactionRecord {
+	const mapped = toCamelCase(row) as Partial<ReactionRecord>
+	return {
+		id: Number(mapped.id),
+		userId: Number(mapped.userId),
+		targetType: String(mapped.targetType ?? '') as ReactionTargetType,
+		targetId: Number(mapped.targetId),
+		createdAt: String(mapped.createdAt ?? new Date().toISOString()),
+	}
+}
 
-function nextReactionId(): number {
-	return reactions.length ? Math.max(...reactions.map((r) => r.id)) + 1 : 1
+async function activityExists(activityId: number): Promise<boolean> {
+	const db = connect()
+	const { data, error } = await db.from('activities').select('id').eq('id', activityId).maybeSingle()
+	if (error) {
+		throw Object.assign(new Error(error.message), { status: 500 })
+	}
+	return Boolean(data)
+}
+
+async function userExists(userId: number): Promise<boolean> {
+	const db = connect()
+	const { data, error } = await db.from('users').select('id').eq('id', userId).maybeSingle()
+	if (error) {
+		throw Object.assign(new Error(error.message), { status: 500 })
+	}
+	return Boolean(data)
 }
 
 async function targetExists(targetType: ReactionTargetType, targetId: number): Promise<boolean> {
-	if (targetType === 'activity') await activityExists(targetId)
-	// if (targetType === 'comment') await commentExists(targetId)
+	if (targetType === 'activity') {
+		return activityExists(targetId)
+	}
 	return false
 }
 
-export function listReactions(targetType: ReactionTargetType, targetId: number): ReactionRecord[] {
-	if (!targetExists(targetType, targetId)) {
+export async function listReactions(targetType: ReactionTargetType, targetId: number): Promise<ReactionRecord[]> {
+	if (!(await targetExists(targetType, targetId))) {
 		throw Object.assign(new Error(`${targetType} not found`), { status: 404 })
 	}
 
-	return reactions.filter((r) => r.targetType === targetType && r.targetId === targetId)
+	const db = connect()
+	const { data, error } = await db
+		.from(TABLE_NAME)
+		.select('*')
+		.eq('target_type', targetType)
+		.eq('target_id', targetId)
+
+	if (error) {
+		throw Object.assign(new Error(error.message), { status: 500 })
+	}
+
+	return (data ?? []).map((row) => mapReactionRow(row as Record<string, unknown>))
 }
 
-export function createReaction(input: CreateReactionInput): ReactionRecord {
-	if (!userExists(input.userId)) {
+export async function listReactionsByTargetIds(
+	targetType: ReactionTargetType,
+	targetIds: number[],
+): Promise<Map<number, ReactionRecord[]>> {
+	if (targetIds.length === 0) {
+		return new Map()
+	}
+
+	const db = connect()
+	const { data, error } = await db
+		.from(TABLE_NAME)
+		.select('*')
+		.eq('target_type', targetType)
+		.in('target_id', targetIds)
+
+	if (error) {
+		throw Object.assign(new Error(error.message), { status: 500 })
+	}
+
+	const grouped = new Map<number, ReactionRecord[]>()
+	for (const row of data ?? []) {
+		const reaction = mapReactionRow(row as Record<string, unknown>)
+		const list = grouped.get(reaction.targetId) ?? []
+		list.push(reaction)
+		grouped.set(reaction.targetId, list)
+	}
+
+	return grouped
+}
+
+export async function createReaction(input: CreateReactionInput): Promise<ReactionRecord> {
+	if (!(await userExists(input.userId))) {
 		throw Object.assign(new Error('user not found'), { status: 404 })
 	}
-	if (!targetExists(input.targetType, input.targetId)) {
+	if (!(await targetExists(input.targetType, input.targetId))) {
 		throw Object.assign(new Error(`${input.targetType} not found`), { status: 404 })
 	}
 
-	const existing = reactions.find(
-		(r) =>
-			r.userId === input.userId &&
-			r.targetType === input.targetType &&
-			r.targetId === input.targetId,
-	)
+	const db = connect()
+	const { data: existing, error: existingError } = await db
+		.from(TABLE_NAME)
+		.select('id')
+		.eq('user_id', input.userId)
+		.eq('target_type', input.targetType)
+		.eq('target_id', input.targetId)
+		.maybeSingle()
+
+	if (existingError) {
+		throw Object.assign(new Error(existingError.message), { status: 500 })
+	}
+
 	if (existing) {
 		throw Object.assign(new Error('reaction already exists'), { status: 409 })
 	}
 
-	const reaction: ReactionRecord = {
-		id: nextReactionId(),
+	const payload = toSnakeCase({
 		userId: input.userId,
 		targetType: input.targetType,
 		targetId: input.targetId,
-		createdAt: new Date().toISOString(),
+	})
+
+	const { data, error } = await db.from(TABLE_NAME).insert(payload).select().single()
+
+	if (error) {
+		throw Object.assign(new Error(error.message), { status: 500 })
 	}
 
-	reactions.push(reaction)
-	return reaction
+	return mapReactionRow(data as Record<string, unknown>)
 }
 
-export function deleteReaction(
+export async function deleteReaction(
 	targetType: ReactionTargetType,
 	targetId: number,
 	userId: number,
-): ReactionRecord {
-	const index = reactions.findIndex(
-		(r) => r.targetType === targetType && r.targetId === targetId && r.userId === userId,
-	)
-	if (index < 0) {
+): Promise<ReactionRecord> {
+	const db = connect()
+	const { data: existing, error: existingError } = await db
+		.from(TABLE_NAME)
+		.select('*')
+		.eq('user_id', userId)
+		.eq('target_type', targetType)
+		.eq('target_id', targetId)
+		.maybeSingle()
+
+	if (existingError) {
+		throw Object.assign(new Error(existingError.message), { status: 500 })
+	}
+
+	if (!existing) {
 		throw Object.assign(new Error('reaction not found'), { status: 404 })
 	}
 
-	const [removed] = reactions.splice(index, 1)
-	return removed
+	const { data, error } = await db
+		.from(TABLE_NAME)
+		.delete()
+		.eq('user_id', userId)
+		.eq('target_type', targetType)
+		.eq('target_id', targetId)
+		.select()
+		.single()
+
+	if (error) {
+		throw Object.assign(new Error(error.message), { status: 500 })
+	}
+
+	return mapReactionRow(data as Record<string, unknown>)
 }
 
-export function deleteReactionsByTarget(targetType: ReactionTargetType, targetId: number): void {
-	reactions = reactions.filter((r) => !(r.targetType === targetType && r.targetId === targetId))
-}
+export async function seed(): Promise<number> {
+	const db = connect()
+	let seededReactions = 0
 
-export function deleteReactionsByUser(userId: number): void {
-	reactions = reactions.filter((r) => r.userId !== userId)
+	for (const reaction of reactionsData.reactions) {
+		const result = await db.from(TABLE_NAME).insert(
+			toSnakeCase({
+				userId: reaction.userId,
+				targetType: reaction.targetType,
+				targetId: reaction.targetId,
+			}),
+		)
+
+		if (result.error) {
+			throw result.error
+		}
+
+		seededReactions += 1
+	}
+
+	return seededReactions
 }

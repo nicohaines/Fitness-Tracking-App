@@ -19,11 +19,8 @@ export function validateJWT(req: Request, _res: Response, next: NextFunction) {
 
     verify(token, process.env.JWT_SECRET || "secret", (err, decoded) => {
         if (err) {
-            return next(
-                Object.assign(new Error("Invalid or expired token"), {
-                    status: 401,
-                }),
-            )
+            req.user = undefined
+            return next()
         }
 
         req.user = decoded as User

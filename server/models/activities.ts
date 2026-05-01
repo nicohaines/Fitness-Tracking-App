@@ -1,6 +1,7 @@
 import type { Activity } from '../types'
 import { getUserById } from './users'
 import { connect, toCamelCase, toSnakeCase } from './supabase'
+import { listReactionsByTargetIds } from './reactions'
 import data1 from "../data/users.json"
 
 export const TABLE_NAME = "activities"
@@ -37,6 +38,22 @@ function mapActivityRow(row: Record<string, unknown>): Activity {
 	}
 }
 
+async function attachActivityReactions(activities: Activity[]): Promise<Activity[]> {
+	if (activities.length === 0) {
+		return activities
+	}
+
+	const reactionsByActivity = await listReactionsByTargetIds(
+		'activity',
+		activities.map((activity) => activity.id),
+	)
+
+	return activities.map((activity) => ({
+		...activity,
+		reactions: reactionsByActivity.get(activity.id) ?? [],
+	}))
+}
+
 export async function listActivitiesByUser(userId: number): Promise<Activity[]> {
 	const db = connect()
 	const { data, error } = await db.from(TABLE_NAME).select('*', { count: 'estimated' }).eq('user_id', userId)
@@ -45,7 +62,8 @@ export async function listActivitiesByUser(userId: number): Promise<Activity[]> 
 		throw Object.assign(new Error(error.message), { status: 500 })
 	}
 
-	return (data ?? []).map((row) => mapActivityRow(row as Record<string, unknown>))
+	const activities = (data ?? []).map((row) => mapActivityRow(row as Record<string, unknown>))
+	return attachActivityReactions(activities)
 }
 
 export async function getActivityByUser(userId: number, activityId: number): Promise<Activity | undefined> {
@@ -61,7 +79,11 @@ export async function getActivityByUser(userId: number, activityId: number): Pro
 		throw Object.assign(new Error(error.message), { status: 500 })
 	}
 
-	return data ? mapActivityRow(data as Record<string, unknown>) : undefined
+	if (!data) {
+		return undefined
+	}
+
+	return (await attachActivityReactions([mapActivityRow(data as Record<string, unknown>)]))[0]
 }
 
 export async function createActivityForUser(userId: number, input: CreateActivityInput): Promise<Activity> {
@@ -93,7 +115,7 @@ export async function createActivityForUser(userId: number, input: CreateActivit
 		throw Object.assign(new Error(error.message ?? 'db error'), { status: 500, details: error })
 	}
 
-	return mapActivityRow(data as Record<string, unknown>)
+	return (await attachActivityReactions([mapActivityRow(data as Record<string, unknown>)]))[0]
 }
 
 export async function updateActivityForUser(
@@ -142,7 +164,7 @@ export async function updateActivityForUser(
 		throw Object.assign(new Error(error.message), { status: 500 })
 	}
 
-	return mapActivityRow(data as Record<string, unknown>)
+	return (await attachActivityReactions([mapActivityRow(data as Record<string, unknown>)]))[0]
 }
 
 export async function deleteActivityForUser(userId: number, activityId: number): Promise<Activity> {
@@ -169,7 +191,7 @@ export async function deleteActivityForUser(userId: number, activityId: number):
 		throw Object.assign(new Error(error.message), { status: 500 })
 	}
 
-	return mapActivityRow(data as Record<string, unknown>)
+	return (await attachActivityReactions([mapActivityRow(data as Record<string, unknown>)]))[0]
 }
 
 export async function seed(): Promise<number> {
