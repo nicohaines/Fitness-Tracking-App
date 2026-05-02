@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { api } from '../services/myFetch'
+import useSessionStore from './session'
 import type { DataEnvelope, DataListEnvelope, Friendship } from '../../../server/types'
 
 export const useFriendsStore = defineStore('friends', () => {
+  const session = useSessionStore()
   const friendshipsByUser = ref<Record<number, Friendship[]>>({})
 
   function getFriendships(userId: number): Friendship[] {
@@ -11,20 +12,20 @@ export const useFriendsStore = defineStore('friends', () => {
   }
 
   async function loadFriendships(userId: number) {
-    const data = await api<DataListEnvelope<Friendship>>(`/api/v1/users/${userId}/friends`)
+    const data = await session.api<DataListEnvelope<Friendship>>(`/users/${userId}/friends`)
     friendshipsByUser.value[userId] = data.data
     return data
   }
 
   async function addFriend(userId: number, friendId: number) {
-    const data = await api<DataEnvelope<Friendship>>(`/api/v1/users/${userId}/friends`, { friendId })
+    const data = await session.api<DataEnvelope<Friendship>>(`/users/${userId}/friends`, { friendId })
     const list = friendshipsByUser.value[userId] ?? []
     friendshipsByUser.value[userId] = [...list, data.data]
     return data
   }
 
   async function removeFriend(userId: number, friendId: number) {
-    const data = await api<DataEnvelope<Friendship>>(`/api/v1/users/${userId}/friends/${friendId}`, null, {
+    const data = await session.api<DataEnvelope<Friendship>>(`/users/${userId}/friends/${friendId}`, null, {
       method: 'DELETE',
     })
 

@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { api } from '../services/myFetch'
 import { useActivitiesStore } from './activities'
 import { useReactionsStore } from './reactions'
+import useSessionStore from './session'
 import type { DataEnvelope, DataListEnvelope, Reaction, User } from '../../../server/types'
 
 type UserStats = {
@@ -33,6 +33,7 @@ type CreateActivityInput = {
 }
 
 export const useUserStore = defineStore('user', () => {
+  const session = useSessionStore()
   const activitiesStore = useActivitiesStore()
   const reactionsStore = useReactionsStore()
 
@@ -65,14 +66,14 @@ export const useUserStore = defineStore('user', () => {
   }
 
   async function loadUsers() {
-    const data = await api<DataListEnvelope<User>>('/api/v1/users')
+    const data = await session.api<DataListEnvelope<User>>('/users')
     users.value = data.data
     syncUserReferences()
     return data
   }
 
   async function getUser(id: number) {
-    return api<DataEnvelope<User>>(`/api/v1/users/${id}`)
+    return session.api<DataEnvelope<User>>(`/users/${id}`)
   }
 
   async function login(username: string): Promise<boolean> {
@@ -80,7 +81,7 @@ export const useUserStore = defineStore('user', () => {
     if (!trimmed) return false
 
     try {
-      const auth = await api<DataEnvelope<{ token: string; user: User }>>('/api/v1/users/login', {
+      const auth = await session.api<DataEnvelope<{ token: string; user: User }>>('/users/login', {
         username: trimmed,
         password: '',
       }, {
@@ -127,7 +128,7 @@ export const useUserStore = defineStore('user', () => {
     if (!input.username || !input.displayName) return false
 
     try {
-      const data = await api<DataEnvelope<User>>('/api/v1/users', input)
+      const data = await session.api<DataEnvelope<User>>('/users', input)
       users.value.push(data.data)
       closeModifyUserForm()
       return true
@@ -155,7 +156,7 @@ export const useUserStore = defineStore('user', () => {
     if (!patch.username || !patch.displayName) return false
 
     try {
-      const data = await api<DataEnvelope<User>>(`/api/v1/users/${userId}`, patch, {
+      const data = await session.api<DataEnvelope<User>>(`/users/${userId}`, patch, {
         method: 'PATCH',
       })
       mergeUser(data.data)
@@ -171,7 +172,7 @@ export const useUserStore = defineStore('user', () => {
     if (user.id === currentUser.value.id) return false
 
     try {
-      await api<DataEnvelope<User>>(`/api/v1/users/${user.id}`, null, {
+      await session.api<DataEnvelope<User>>(`/users/${user.id}`, null, {
         method: 'DELETE',
       })
       users.value = users.value.filter((u) => u.id !== user.id)

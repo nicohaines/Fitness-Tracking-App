@@ -1,5 +1,3 @@
-//Not current integrated
-
 import { defineStore } from 'pinia'
 import { type DataEnvelope, type User } from '../../../server/types'
 import { computed, ref } from 'vue'

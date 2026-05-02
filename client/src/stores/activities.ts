@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { api } from '../services/myFetch'
+import useSessionStore from './session'
 import type { Activity, DataEnvelope, DataListEnvelope } from '../../../server/types'
 
 type CreateActivityInput = {
@@ -16,6 +16,7 @@ type CreateActivityInput = {
 type UpdateActivityInput = Partial<CreateActivityInput>
 
 export const useActivitiesStore = defineStore('activities', () => {
+  const session = useSessionStore()
   const activitiesByUser = ref<Record<number, Activity[]>>({})
 
   function getUserActivities(userId: number): Activity[] {
@@ -23,24 +24,24 @@ export const useActivitiesStore = defineStore('activities', () => {
   }
 
   async function loadActivities(userId: number) {
-    const data = await api<DataListEnvelope<Activity>>(`/api/v1/users/${userId}/activities`)
+    const data = await session.api<DataListEnvelope<Activity>>(`/users/${userId}/activities`)
     activitiesByUser.value[userId] = data.data
     return data
   }
 
   async function getActivity(userId: number, activityId: number) {
-    return api<DataEnvelope<Activity>>(`/api/v1/users/${userId}/activities/${activityId}`)
+    return session.api<DataEnvelope<Activity>>(`/users/${userId}/activities/${activityId}`)
   }
 
   async function createActivity(userId: number, activity: CreateActivityInput) {
-    const data = await api<DataEnvelope<Activity>>(`/api/v1/users/${userId}/activities`, activity)
+    const data = await session.api<DataEnvelope<Activity>>(`/users/${userId}/activities`, activity)
     const list = activitiesByUser.value[userId] ?? []
     activitiesByUser.value[userId] = [data.data, ...list]
     return data
   }
 
   async function updateActivity(userId: number, activityId: number, patch: UpdateActivityInput) {
-    const data = await api<DataEnvelope<Activity>>(`/api/v1/users/${userId}/activities/${activityId}`, patch, {
+    const data = await session.api<DataEnvelope<Activity>>(`/users/${userId}/activities/${activityId}`, patch, {
       method: 'PATCH',
     })
 
@@ -55,7 +56,7 @@ export const useActivitiesStore = defineStore('activities', () => {
   }
 
   async function deleteActivity(userId: number, activityId: number) {
-    const data = await api<DataEnvelope<Activity>>(`/api/v1/users/${userId}/activities/${activityId}`, null, {
+    const data = await session.api<DataEnvelope<Activity>>(`/users/${userId}/activities/${activityId}`, null, {
       method: 'DELETE',
     })
 

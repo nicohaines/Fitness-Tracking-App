@@ -1,8 +1,6 @@
-//This is intended to be a future feature and is not yet functional.
-
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { api } from '../services/myFetch'
+import useSessionStore from './session'
 import type {
   DataEnvelope,
   DataListEnvelope,
@@ -15,6 +13,7 @@ function targetKey(targetType: ReactionTargetType, targetId: number): string {
 }
 
 export const useReactionsStore = defineStore('reactions', () => {
+  const session = useSessionStore()
   const reactionsByTarget = ref<Record<string, ReactionRecord[]>>({})
 
   function getReactions(targetType: ReactionTargetType, targetId: number): ReactionRecord[] {
@@ -22,13 +21,13 @@ export const useReactionsStore = defineStore('reactions', () => {
   }
 
   async function loadReactions(targetType: ReactionTargetType, targetId: number) {
-    const data = await api<DataListEnvelope<ReactionRecord>>(`/api/v1/reactions/${targetType}/${targetId}`)
+    const data = await session.api<DataListEnvelope<ReactionRecord>>(`/reactions/${targetType}/${targetId}`)
     reactionsByTarget.value[targetKey(targetType, targetId)] = data.data
     return data
   }
 
   async function createReaction(targetType: ReactionTargetType, targetId: number, userId: number) {
-    const data = await api<DataEnvelope<ReactionRecord>>('/api/v1/reactions', {
+    const data = await session.api<DataEnvelope<ReactionRecord>>('/reactions', {
       targetType,
       targetId,
       userId,
@@ -41,8 +40,8 @@ export const useReactionsStore = defineStore('reactions', () => {
   }
 
   async function deleteReaction(targetType: ReactionTargetType, targetId: number, userId: number) {
-    const data = await api<DataEnvelope<ReactionRecord>>(
-      `/api/v1/reactions/${targetType}/${targetId}/${userId}`,
+    const data = await session.api<DataEnvelope<ReactionRecord>>(
+      `/reactions/${targetType}/${targetId}/${userId}`,
       null,
       {
         method: 'DELETE',
