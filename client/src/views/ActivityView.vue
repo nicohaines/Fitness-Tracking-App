@@ -35,7 +35,7 @@ const userStore = useUserStore()
         <div v-if="userStore.statistics(userStore.currentUser.id).totalDistance !== 0" class="level-item has-text-centered">
           <div>
             <p class="heading">Total Distance</p>
-            <p class="title">{{ userStore.statistics(userStore.currentUser.id).totalDistance }} miles</p>
+            <p class="title">{{ userStore.statistics(userStore.currentUser.id).totalDistance.toFixed(1) }} miles</p>
           </div>
         </div>
         <div v-if="userStore.statistics(userStore.currentUser.id).maxWeight !== 0" class="level-item has-text-centered">

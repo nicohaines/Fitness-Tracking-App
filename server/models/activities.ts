@@ -23,6 +23,7 @@ type CreateActivityInput = {
 
 type UpdateActivityInput = Partial<CreateActivityInput>
 
+
 function mapActivityRow(row: Record<string, unknown>): Activity {
 	const mapped = toCamelCase(row) as Partial<Activity>
 	return {
@@ -56,7 +57,12 @@ async function attachActivityReactions(activities: Activity[]): Promise<Activity
 
 export async function listActivitiesByUser(userId: number): Promise<Activity[]> {
 	const db = connect()
-	const { data, error } = await db.from(TABLE_NAME).select('*', { count: 'estimated' }).eq('user_id', userId)
+	const { data, error } = await db
+		.from(TABLE_NAME)
+		.select('*', { count: 'estimated' })
+		.eq('user_id', userId)
+		.order('date', { ascending: false })
+		.order('id', { ascending: false })
 
 	if (error) {
 		throw Object.assign(new Error(error.message), { status: 500 })
@@ -64,6 +70,36 @@ export async function listActivitiesByUser(userId: number): Promise<Activity[]> 
 
 	const activities = (data ?? []).map((row) => mapActivityRow(row as Record<string, unknown>))
 	return attachActivityReactions(activities)
+}
+
+export async function listActivitiesByUserPaged(
+	userId: number,
+	options: { page?: number; pageSize?: number } = {},
+): Promise<{ activities: Activity[]; total: number }> {
+	const db = connect()
+
+	const page = Math.max(1, Number(options.page ?? 1))
+	const pageSize = Math.max(1, Number(options.pageSize ?? 10))
+	const start = (page - 1) * pageSize
+
+	const query = db
+		.from(TABLE_NAME)
+		.select('*', { count: 'exact' })
+		.eq('user_id', userId)
+		.order('date', { ascending: false })
+		.order('id', { ascending: false })
+		.range(start, start + pageSize - 1)
+
+	const { data, error, count } = await query
+
+	if (error) {
+		throw Object.assign(new Error(error.message), { status: 500 })
+	}
+
+	const activities = (data ?? []).map((row) => mapActivityRow(row as Record<string, unknown>))
+	const attached = await attachActivityReactions(activities)
+
+	return { activities: attached, total: count ?? attached.length }
 }
 
 export async function getActivityByUser(userId: number, activityId: number): Promise<Activity | undefined> {

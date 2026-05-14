@@ -4,6 +4,7 @@ import {
   deleteActivityForUser,
   getActivityByUser,
   listActivitiesByUser,
+  listActivitiesByUserPaged,
   updateActivityForUser,
 } from "../models/activities";
 import type { Activity, DataEnvelope, DataListEnvelope } from "../types";
@@ -26,6 +27,20 @@ app.get("/", async (req, res, next) => {
   try {
     const userId = parseId((req.params as { userId: string }).userId);
     if (!isSelfOrAdmin(req, userId)) throw Object.assign(new Error("forbidden"), { status: 403 });
+
+    const page = req.query.page ? Number(req.query.page) : 1
+    const pageSize = req.query.pageSize ? Number(req.query.pageSize) : undefined
+
+    if (pageSize) {
+      const { activities, total } = await listActivitiesByUserPaged(userId, { page, pageSize })
+      const response: DataListEnvelope<Activity> = {
+        data: activities,
+        total,
+        isSuccess: true,
+      }
+      res.send(response)
+      return
+    }
 
     const activities = await listActivitiesByUser(userId);
     const response: DataListEnvelope<Activity> = {
@@ -59,6 +74,21 @@ app.get("/:id", async (req, res, next) => {
     next(err);
   }
 });
+
+app.get("/count", async (req, res) => {
+  try {
+    const userId = parseId((req.params as { userId: string }).userId)
+    if (!isSelfOrAdmin(req, userId)) throw Object.assign(new Error("forbidden"), { status: 403 });
+    const { total } = await listActivitiesByUserPaged(userId, { page: 1, pageSize: 1 })
+    const response: DataEnvelope<{ count: number }> = {
+      data: { count: total },
+      isSuccess: true,
+    }
+    res.send(response)
+  } catch (err) {
+    res.status((err as any).status ?? 500).send({ data: null, isSuccess: false, message: (err as any).message })
+  }
+})
 
 app.post("/", async (req, res, next) => {
   try {

@@ -282,5 +282,753 @@
         }
       ]
     }
+    ,
+    {
+      "id": 11,
+      "username": "riley-scroll",
+      "displayName": "Riley Harper",
+      "administrator": false,
+      "profilePicture": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop",
+      "bio": "Building and testing the activity feed — lots of tiny workouts to exercise infinite scroll.",
+      "reactions": 12,
+      "activity": [
+        {
+          "timeElapsed": 1800,
+          "type": "Running",
+          "date": "2026-05-14",
+          "intensity": "Medium",
+          "distance": 4.2,
+          "notes": "Morning easy run."
+        },
+        {
+          "timeElapsed": 2400,
+          "type": "Cycling",
+          "date": "2026-05-13",
+          "intensity": "Medium",
+          "distance": 12.1,
+          "notes": "Commuter ride with two short efforts."
+        },
+        {
+          "timeElapsed": 1500,
+          "type": "Strength",
+          "date": "2026-05-12",
+          "intensity": "Low",
+          "weight": 95,
+          "notes": "Quick upper-body circuit."
+        },
+        {
+          "timeElapsed": 1200,
+          "type": "Yoga",
+          "date": "2026-05-11",
+          "intensity": "Low",
+          "notes": "Short mobility flow."
+        },
+        {
+          "timeElapsed": 900,
+          "type": "Walking",
+          "date": "2026-05-10",
+          "intensity": "Low",
+          "distance": 1.4,
+          "notes": "Lunch break walk."
+        },
+        {
+          "timeElapsed": 1800,
+          "type": "Swimming",
+          "date": "2026-05-09",
+          "intensity": "Medium",
+          "distance": 1.2,
+          "notes": "Technique drills and easy laps."
+        },
+        {
+          "timeElapsed": 2100,
+          "type": "Running",
+          "date": "2026-05-08",
+          "intensity": "Medium",
+          "distance": 5.0,
+          "notes": "Progression run."
+        },
+        {
+          "timeElapsed": 2700,
+          "type": "Cycling",
+          "date": "2026-05-07",
+          "intensity": "High",
+          "distance": 18.2,
+          "notes": "Threshold intervals."
+        },
+        {
+          "timeElapsed": 1500,
+          "type": "Strength",
+          "date": "2026-05-06",
+          "intensity": "Medium",
+          "weight": 115,
+          "notes": "Deadlift-focused sets."
+        },
+        {
+          "timeElapsed": 900,
+          "type": "Yoga",
+          "date": "2026-05-05",
+          "intensity": "Low",
+          "notes": "Evening stretch."
+        },
+        {
+          "timeElapsed": 1200,
+          "type": "Walking",
+          "date": "2026-05-04",
+          "intensity": "Low",
+          "distance": 1.0,
+          "notes": "Neighborhood loop."
+        },
+        {
+          "timeElapsed": 1800,
+          "type": "Swimming",
+          "date": "2026-05-03",
+          "intensity": "Medium",
+          "distance": 1.0,
+          "notes": "Mixed strokes."
+        },
+        {
+          "timeElapsed": 2000,
+          "type": "Running",
+          "date": "2026-05-02",
+          "intensity": "High",
+          "distance": 6.1,
+          "notes": "Fartlek session."
+        },
+        {
+          "timeElapsed": 2500,
+          "type": "Cycling",
+          "date": "2026-05-01",
+          "intensity": "Medium",
+          "distance": 14.5,
+          "notes": "Steady state ride."
+        },
+        {
+          "timeElapsed": 1600,
+          "type": "Strength",
+          "date": "2026-04-30",
+          "intensity": "High",
+          "weight": 135,
+          "notes": "Bench-focused session."
+        },
+        {
+          "timeElapsed": 900,
+          "type": "Yoga",
+          "date": "2026-04-29",
+          "intensity": "Low",
+          "notes": "Balance and breath work."
+        },
+        {
+          "timeElapsed": 800,
+          "type": "Walking",
+          "date": "2026-04-28",
+          "intensity": "Low",
+          "distance": 0.9,
+          "notes": "Errand walk."
+        },
+        {
+          "timeElapsed": 1700,
+          "type": "Swimming",
+          "date": "2026-04-27",
+          "intensity": "Medium",
+          "distance": 1.1,
+          "notes": "Pace work."
+        },
+        {
+          "timeElapsed": 2200,
+          "type": "Running",
+          "date": "2026-04-26",
+          "intensity": "Medium",
+          "distance": 5.6,
+          "notes": "Easy progression run."
+        },
+        {
+          "timeElapsed": 2600,
+          "type": "Cycling",
+          "date": "2026-04-25",
+          "intensity": "High",
+          "distance": 20.3,
+          "notes": "Hilly loop."
+        },
+        {
+          "timeElapsed": 1400,
+          "type": "Strength",
+          "date": "2026-04-24",
+          "intensity": "Medium",
+          "weight": 125,
+          "notes": "Accessory lifts."
+        },
+        {
+          "timeElapsed": 1000,
+          "type": "Yoga",
+          "date": "2026-04-23",
+          "intensity": "Low",
+          "notes": "Evening wind-down."
+        },
+        {
+          "timeElapsed": 700,
+          "type": "Walking",
+          "date": "2026-04-22",
+          "intensity": "Low",
+          "distance": 0.8,
+          "notes": "Short neighborhood stroll."
+        },
+        {
+          "timeElapsed": 1900,
+          "type": "Swimming",
+          "date": "2026-04-21",
+          "intensity": "Medium",
+          "distance": 1.3,
+          "notes": "Technique and drills."
+        },
+        {
+          "timeElapsed": 2300,
+          "type": "Running",
+          "date": "2026-04-20",
+          "intensity": "High",
+          "distance": 7.2,
+          "notes": "Tempo segments."
+        },
+        {
+          "timeElapsed": 2400,
+          "type": "Cycling",
+          "date": "2026-04-19",
+          "intensity": "Medium",
+          "distance": 15.0,
+          "notes": "Group ride effort."
+        },
+        {
+          "timeElapsed": 1300,
+          "type": "Strength",
+          "date": "2026-04-18",
+          "intensity": "High",
+          "weight": 145,
+          "notes": "Heavy squats."
+        },
+        {
+          "timeElapsed": 950,
+          "type": "Yoga",
+          "date": "2026-04-17",
+          "intensity": "Low",
+          "notes": "Quick mobility."
+        },
+        {
+          "timeElapsed": 1100,
+          "type": "Walking",
+          "date": "2026-04-16",
+          "intensity": "Low",
+          "distance": 1.6,
+          "notes": "Park loop."
+        },
+        {
+          "timeElapsed": 2000,
+          "type": "Swimming",
+          "date": "2026-04-15",
+          "intensity": "Medium",
+          "distance": 1.4,
+          "notes": "Interval sets."
+        },
+        {
+          "timeElapsed": 2100,
+          "type": "Running",
+          "date": "2026-04-14",
+          "intensity": "Medium",
+          "distance": 5.3,
+          "notes": "Morning steady run."
+        },
+        {
+          "timeElapsed": 2550,
+          "type": "Cycling",
+          "date": "2026-04-13",
+          "intensity": "High",
+          "distance": 19.0,
+          "notes": "Climbing repeats."
+        },
+        {
+          "timeElapsed": 1500,
+          "type": "Strength",
+          "date": "2026-04-12",
+          "intensity": "Medium",
+          "weight": 110,
+          "notes": "Pressing and rows."
+        },
+        {
+          "timeElapsed": 900,
+          "type": "Yoga",
+          "date": "2026-04-11",
+          "intensity": "Low",
+          "notes": "Breath-focused flow."
+        },
+        {
+          "timeElapsed": 800,
+          "type": "Walking",
+          "date": "2026-04-10",
+          "intensity": "Low",
+          "distance": 0.7,
+          "notes": "Coffee run."
+        },
+        {
+          "timeElapsed": 1750,
+          "type": "Swimming",
+          "date": "2026-04-09",
+          "intensity": "Medium",
+          "distance": 1.0,
+          "notes": "Drills and sprints."
+        },
+        {
+          "timeElapsed": 2250,
+          "type": "Running",
+          "date": "2026-04-08",
+          "intensity": "High",
+          "distance": 8.0,
+          "notes": "Speed intervals."
+        },
+        {
+          "timeElapsed": 2600,
+          "type": "Cycling",
+          "date": "2026-04-07",
+          "intensity": "Medium",
+          "distance": 16.7,
+          "notes": "Endurance ride."
+        },
+        {
+          "timeElapsed": 1400,
+          "type": "Strength",
+          "date": "2026-04-06",
+          "intensity": "High",
+          "weight": 155,
+          "notes": "Power work."
+        },
+        {
+          "timeElapsed": 1050,
+          "type": "Yoga",
+          "date": "2026-04-05",
+          "intensity": "Low",
+          "notes": "Morning flow."
+        },
+        {
+          "timeElapsed": 900,
+          "type": "Walking",
+          "date": "2026-04-04",
+          "intensity": "Low",
+          "distance": 1.2,
+          "notes": "Errand stroll."
+        },
+        {
+          "timeElapsed": 1850,
+          "type": "Swimming",
+          "date": "2026-04-03",
+          "intensity": "Medium",
+          "distance": 1.2,
+          "notes": "Pace building."
+        },
+        {
+          "timeElapsed": 2050,
+          "type": "Running",
+          "date": "2026-04-02",
+          "intensity": "Medium",
+          "distance": 5.8,
+          "notes": "Comfortable steady run."
+        },
+        {
+          "timeElapsed": 2500,
+          "type": "Cycling",
+          "date": "2026-04-01",
+          "intensity": "High",
+          "distance": 18.5,
+          "notes": "Club group efforts."
+        },
+        {
+          "timeElapsed": 1550,
+          "type": "Strength",
+          "date": "2026-03-31",
+          "intensity": "Medium",
+          "weight": 120,
+          "notes": "Accessory circuit."
+        },
+        {
+          "timeElapsed": 950,
+          "type": "Yoga",
+          "date": "2026-03-30",
+          "intensity": "Low",
+          "notes": "Quick midday stretch."
+        },
+        {
+          "timeElapsed": 800,
+          "type": "Walking",
+          "date": "2026-03-29",
+          "intensity": "Low",
+          "distance": 1.0,
+          "notes": "Walk with a friend."
+        },
+        {
+          "timeElapsed": 1950,
+          "type": "Swimming",
+          "date": "2026-03-28",
+          "intensity": "Medium",
+          "distance": 1.5,
+          "notes": "Endurance-focused laps."
+        },
+        {
+          "timeElapsed": 2350,
+          "type": "Running",
+          "date": "2026-03-27",
+          "intensity": "High",
+          "distance": 9.0,
+          "notes": "Long tempo run."
+        },
+        {
+          "timeElapsed": 2700,
+          "type": "Cycling",
+          "date": "2026-03-26",
+          "intensity": "Medium",
+          "distance": 17.9,
+          "notes": "Rolling hills."
+        },
+        {
+          "timeElapsed": 1500,
+          "type": "Strength",
+          "date": "2026-03-25",
+          "intensity": "High",
+          "weight": 140,
+          "notes": "Lower-body heavy session."
+        },
+        {
+          "timeElapsed": 1000,
+          "type": "Yoga",
+          "date": "2026-03-24",
+          "intensity": "Low",
+          "notes": "Hip mobility."
+        },
+        {
+          "timeElapsed": 900,
+          "type": "Walking",
+          "date": "2026-03-23",
+          "intensity": "Low",
+          "distance": 1.3,
+          "notes": "Evening walk."
+        },
+        {
+          "timeElapsed": 1800,
+          "type": "Swimming",
+          "date": "2026-03-22",
+          "intensity": "Medium",
+          "distance": 1.0,
+          "notes": "Technique and steady sets."
+        },
+        {
+          "timeElapsed": 2200,
+          "type": "Running",
+          "date": "2026-03-21",
+          "intensity": "Medium",
+          "distance": 6.0,
+          "notes": "Hills and strides."
+        },
+        {
+          "timeElapsed": 2400,
+          "type": "Cycling",
+          "date": "2026-03-20",
+          "intensity": "High",
+          "distance": 21.0,
+          "notes": "Long ride with threshold blocks."
+        },
+        {
+          "timeElapsed": 1600,
+          "type": "Strength",
+          "date": "2026-03-19",
+          "intensity": "Medium",
+          "weight": 125,
+          "notes": "Hypertrophy-focused session."
+        },
+        {
+          "timeElapsed": 900,
+          "type": "Yoga",
+          "date": "2026-03-18",
+          "intensity": "Low",
+          "notes": "Breath and hips."
+        },
+        {
+          "timeElapsed": 700,
+          "type": "Walking",
+          "date": "2026-03-17",
+          "intensity": "Low",
+          "distance": 0.6,
+          "notes": "Quick dog walk."
+        },
+        {
+          "timeElapsed": 1700,
+          "type": "Swimming",
+          "date": "2026-03-16",
+          "intensity": "Medium",
+          "distance": 0.9,
+          "notes": "Short intervals in the pool."
+        },
+        {
+          "timeElapsed": 2100,
+          "type": "Running",
+          "date": "2026-03-15",
+          "intensity": "Medium",
+          "distance": 5.2,
+          "notes": "Recovery run."
+        },
+        {
+          "timeElapsed": 2500,
+          "type": "Cycling",
+          "date": "2026-03-14",
+          "intensity": "Medium",
+          "distance": 15.8,
+          "notes": "Mixed pace ride."
+        },
+        {
+          "timeElapsed": 1450,
+          "type": "Strength",
+          "date": "2026-03-13",
+          "intensity": "High",
+          "weight": 150,
+          "notes": "Olympic lift practice."
+        },
+        {
+          "timeElapsed": 980,
+          "type": "Yoga",
+          "date": "2026-03-12",
+          "intensity": "Low",
+          "notes": "Short vinyasa."
+        },
+        {
+          "timeElapsed": 800,
+          "type": "Walking",
+          "date": "2026-03-11",
+          "intensity": "Low",
+          "distance": 1.1,
+          "notes": "Walk to coffee."
+        },
+        {
+          "timeElapsed": 1850,
+          "type": "Swimming",
+          "date": "2026-03-10",
+          "intensity": "Medium",
+          "distance": 1.2,
+          "notes": "Aerobic sets."
+        },
+        {
+          "timeElapsed": 2250,
+          "type": "Running",
+          "date": "2026-03-09",
+          "intensity": "High",
+          "distance": 8.5,
+          "notes": "Progression long run."
+        },
+        {
+          "timeElapsed": 2700,
+          "type": "Cycling",
+          "date": "2026-03-08",
+          "intensity": "High",
+          "distance": 19.7,
+          "notes": "Club time trial prep."
+        },
+        {
+          "timeElapsed": 1500,
+          "type": "Strength",
+          "date": "2026-03-07",
+          "intensity": "Medium",
+          "weight": 130,
+          "notes": "Pull-focused session."
+        },
+        {
+          "timeElapsed": 1000,
+          "type": "Yoga",
+          "date": "2026-03-06",
+          "intensity": "Low",
+          "notes": "Midday calm flow."
+        },
+        {
+          "timeElapsed": 900,
+          "type": "Walking",
+          "date": "2026-03-05",
+          "intensity": "Low",
+          "distance": 1.0,
+          "notes": "Grocery walk."
+        },
+        {
+          "timeElapsed": 1900,
+          "type": "Swimming",
+          "date": "2026-03-04",
+          "intensity": "Medium",
+          "distance": 1.3,
+          "notes": "Endurance laps."
+        },
+        {
+          "timeElapsed": 2300,
+          "type": "Running",
+          "date": "2026-03-03",
+          "intensity": "Medium",
+          "distance": 6.6,
+          "notes": "Tempo middle miles."
+        },
+        {
+          "timeElapsed": 2600,
+          "type": "Cycling",
+          "date": "2026-03-02",
+          "intensity": "Medium",
+          "distance": 17.5,
+          "notes": "Recovery ride with a couple surges."
+        },
+        {
+          "timeElapsed": 1550,
+          "type": "Strength",
+          "date": "2026-03-01",
+          "intensity": "High",
+          "weight": 160,
+          "notes": "Front squat work."
+        },
+        {
+          "timeElapsed": 920,
+          "type": "Yoga",
+          "date": "2026-02-28",
+          "intensity": "Low",
+          "notes": "Quick mobility and breath."
+        },
+        {
+          "timeElapsed": 750,
+          "type": "Walking",
+          "date": "2026-02-27",
+          "intensity": "Low",
+          "distance": 0.9,
+          "notes": "Walk and chat."
+        },
+        {
+          "timeElapsed": 1800,
+          "type": "Swimming",
+          "date": "2026-02-26",
+          "intensity": "Medium",
+          "distance": 1.0,
+          "notes": "Recovery swim."
+        },
+        {
+          "timeElapsed": 2150,
+          "type": "Running",
+          "date": "2026-02-25",
+          "intensity": "High",
+          "distance": 7.0,
+          "notes": "Hill repeats included."
+        },
+        {
+          "timeElapsed": 2450,
+          "type": "Cycling",
+          "date": "2026-02-24",
+          "intensity": "Medium",
+          "distance": 16.2,
+          "notes": "Long steady ride."
+        },
+        {
+          "timeElapsed": 1480,
+          "type": "Strength",
+          "date": "2026-02-23",
+          "intensity": "Medium",
+          "weight": 135,
+          "notes": "Accessory focus."
+        },
+        {
+          "timeElapsed": 980,
+          "type": "Yoga",
+          "date": "2026-02-22",
+          "intensity": "Low",
+          "notes": "Evening stretch session."
+        },
+        {
+          "timeElapsed": 820,
+          "type": "Walking",
+          "date": "2026-02-21",
+          "intensity": "Low",
+          "distance": 1.0,
+          "notes": "Walk to market."
+        },
+        {
+          "timeElapsed": 1800,
+          "type": "Swimming",
+          "date": "2026-02-20",
+          "intensity": "Medium",
+          "distance": 1.1,
+          "notes": "Technique focus."
+        },
+        {
+          "timeElapsed": 2250,
+          "type": "Running",
+          "date": "2026-02-19",
+          "intensity": "Medium",
+          "distance": 6.4,
+          "notes": "Progression run."
+        },
+        {
+          "timeElapsed": 2550,
+          "type": "Cycling",
+          "date": "2026-02-18",
+          "intensity": "High",
+          "distance": 20.0,
+          "notes": "Group tempo efforts."
+        },
+        {
+          "timeElapsed": 1500,
+          "type": "Strength",
+          "date": "2026-02-17",
+          "intensity": "High",
+          "weight": 170,
+          "notes": "Heavy pull day."
+        },
+        {
+          "timeElapsed": 1000,
+          "type": "Yoga",
+          "date": "2026-02-16",
+          "intensity": "Low",
+          "notes": "Morning mobility."
+        },
+        {
+          "timeElapsed": 900,
+          "type": "Walking",
+          "date": "2026-02-15",
+          "intensity": "Low",
+          "distance": 1.2,
+          "notes": "Evening walk."
+        },
+        {
+          "timeElapsed": 1900,
+          "type": "Swimming",
+          "date": "2026-02-14",
+          "intensity": "Medium",
+          "distance": 1.3,
+          "notes": "Valentine's laps."
+        },
+        {
+          "timeElapsed": 2300,
+          "type": "Running",
+          "date": "2026-02-13",
+          "intensity": "High",
+          "distance": 8.2,
+          "notes": "Speedwork session."
+        },
+        {
+          "timeElapsed": 2700,
+          "type": "Cycling",
+          "date": "2026-02-12",
+          "intensity": "Medium",
+          "distance": 18.8,
+          "notes": "Weekend long ride."
+        },
+        {
+          "timeElapsed": 1500,
+          "type": "Strength",
+          "date": "2026-02-11",
+          "intensity": "Medium",
+          "weight": 140,
+          "notes": "Compound lifts and core."
+        },
+        {
+          "timeElapsed": 980,
+          "type": "Yoga",
+          "date": "2026-02-10",
+          "intensity": "Low",
+          "notes": "Short restorative session."
+        }
+      ]
+    }
   ]
 }
