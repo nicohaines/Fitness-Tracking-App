@@ -20,18 +20,32 @@ const userStore = useUserStore()
             />
           </p>
         </figure>
+        <p class="buttons has-text-right is-right">
+          <button class="button" @click="">
+            <span class="icon is-small">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </span>
+          </button>
+        </p>
         <div class="media-content">
           <div class="content">
             <h1 class="title is-2">{{ userStore.displayProfileUser.displayName }}</h1>
 
-            <p><strong>{{ userStore.displayProfileUser.activity.length }} Workouts | {{ userStore.displayProfileUser.friends.length }} Friends | Top Workout:</strong> {{ userStore.statistics(userStore.displayProfileUser.id).favoriteWorkout }}</p>
-            <p><strong>Bio: </strong>
+            <p>
+              <strong
+                >{{ userStore.displayProfileUser.activity.length }} Workouts |
+                {{ userStore.displayProfileUser.friends.length }} Friends | Top Workout:</strong
+              >
+              {{ userStore.statistics(userStore.displayProfileUser.id).favoriteWorkout }}
+            </p>
+            <p>
+              <strong>Bio: </strong>
               {{ userStore.displayProfileUser.bio || '' }}
             </p>
           </div>
         </div>
       </article>
-      
+
       <h2 class="title is-3">Activity</h2>
       <UserActivity />
     </div>
