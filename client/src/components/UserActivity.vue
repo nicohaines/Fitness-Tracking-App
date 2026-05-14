@@ -110,6 +110,7 @@ async function toggleReaction(activity: Activity) {
 <template>
   <div v-if="userStore.currentUser && userStore.displayProfileUser">
     <div v-if="sortedActivities.length" class="table-container">
+      <div class="activity-count-badge">Showing {{ sortedActivities.length }} of {{ total ?? sortedActivities.length }} Activities</div>
       <div>
         <div v-for="sortedActivity in sortedActivities" :key="sortedActivity.id">
           <article class="media">
@@ -178,6 +179,17 @@ async function toggleReaction(activity: Activity) {
 </template>
 
 <style scoped>
+.activity-count-badge {
+  position: fixed;
+  left: 50%;
+  top: 1rem;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  font-weight: 600;
+  z-index: 20;
+  pointer-events: none;
+}
+
 .media {
   margin-bottom: 1rem;
   box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
